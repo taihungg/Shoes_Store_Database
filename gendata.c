@@ -351,7 +351,7 @@ int main()
     {
         if (i != 49)
         {
-            fprintf(filePointer, "(%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n",
+            fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n",
                     i + 1,
                     first_name[random_int(0, 199)],
                     last_name[random_int(0, 199)],
@@ -363,7 +363,7 @@ int main()
         }
         else
         {
-            fprintf(filePointer, "(%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n",
+            fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n",
                     i + 1,
                     first_name[random_int(0, 199)],
                     last_name[random_int(0, 199)],
