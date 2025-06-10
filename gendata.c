@@ -1,15 +1,17 @@
-#include <stdio.h> // Thư viện chuẩn cho các hàm nhập/xuất
+#include <stdio.h>  // Thư viện chuẩn cho các hàm nhập/xuất
 #include <stdlib.h> // Cho rand() và srand()
 #include <time.h>   // Cho time()
 #include <string.h> // Cần thiết cho hàm strcpy
 
 // Ham tao so ngau nhien trong mot khoang
-int random_int(int min, int max) {
+int random_int(int min, int max)
+{
     return min + rand() % (max - min + 1);
 }
 
 // Ham tao so thuc ngau nhien trong mot khoang
-double random_double(double min, double max) {
+double random_double(double min, double max)
+{
     return min + ((double)rand() / RAND_MAX) * (max - min);
 }
 
@@ -36,8 +38,7 @@ const char *first_name[200] = {
     "Dennis", "Andrea", "Arthur", "Jamie", "Roger", "Kelly", "Terry", "Stacy", "Lawrence", "Holly",
     "Sean", "Dawn", "Christian", "Kathleen", "Ethan", "Brandy", "Austin", "Monica", "Joe", "Annette",
     "Albert", "Tonya", "Jesse", "Catherine", "Willie", "Teresa", "Carl", "Jodi", "Billy", "Kara",
-    "Bruce", "Cynthia", "Ralph", "Gina", "Bryan", "Jacqueline", "Roy", "Heidi", "Jordan", "Victoria"
-};
+    "Bruce", "Cynthia", "Ralph", "Gina", "Bryan", "Jacqueline", "Roy", "Heidi", "Jordan", "Victoria"};
 
 const char *last_name[200] = {
     "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Vũ", "Phan", "Trương", "Bùi", "Đặng", "Đỗ", "Ngô", "Hồ", "Dương",
@@ -58,8 +59,7 @@ const char *last_name[200] = {
     "Spencer", "Pierce", "Porter", "Mason", "Gordon", "Shaw", "Holmes", "Rice", "Hunt", "Black",
     "Daniels", "Palmer", "Robertson", "Harrison", "Duncan", "Hart", "Stone", "Warren", "Hawkins", "Webb",
     "Elliott", "Chavez", "Snyder", "Hunter", "Hicks", "Crawford", "Henry", "Boyd", "Mason", "Kennedy",
-    "Lawson", "Garza", "Franklin", "Payne", "Armstrong", "Burke", "Stevens", "Marshall", "Soto", "Matthews"
-};
+    "Lawson", "Garza", "Franklin", "Payne", "Armstrong", "Burke", "Stevens", "Marshall", "Soto", "Matthews"};
 
 const char *city[200] = {
     "Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ", "Nha Trang", "Bình Dương", "Đồng Nai",
@@ -68,7 +68,7 @@ const char *city[200] = {
     "Vũng Tàu", "Thừa Thiên Huế", "Quảng Ninh", "Lâm Đồng", "Kiên Giang", "Thanh Hóa", "Nghệ An", "Bắc Ninh",
     "Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ", "Nha Trang", "Bình Dương", "Đồng Nai",
     "Vũng Tàu", "Thừa Thiên Huế", "Quảng Ninh", "Lâm Đồng", "Kiên Giang", "Thanh Hóa", "Nghệ An", "Bắc Ninh",
-    "Hà Nội", "TP. Hồ Chí Minh", 
+    "Hà Nội", "TP. Hồ Chí Minh",
     "New York", "London", "Tokyo", "Paris", "Sydney", "Berlin", "Toronto", "Singapore", "Dubai", "Los Angeles",
     "Chicago", "Rome", "Madrid", "Moscow", "Beijing", "Mumbai", "Cairo", "Rio de Janeiro", "Mexico City", "Seoul",
     "Amsterdam", "Dublin", "Stockholm", "Vienna", "Lisbon", "Prague", "Warsaw", "Budapest", "Athens", "Helsinki",
@@ -83,8 +83,7 @@ const char *city[200] = {
     "Cairo", "Alexandria", "Giza", "Luxor", "Aswan", "Marrakech", "Casablanca", "Fes", "Rabat", "Tangier",
     "Cape Town", "Johannesburg", "Durban", "Pretoria", "Port Elizabeth", "Nairobi", "Mombasa", "Lagos", "Abuja", "Accra",
     "Mexico City", "Cancun", "Guadalajara", "Tijuana", "Monterrey", "Rio de Janeiro", "Sao Paulo", "Salvador", "Brasilia", "Fortaleza",
-    "Buenos Aires", "Mendoza", "Cordoba", "Rosario", "Santiago", "Valparaiso", "Lima", "Cusco", "Bogota", "Medellin"
-};
+    "Buenos Aires", "Mendoza", "Cordoba", "Rosario", "Santiago", "Valparaiso", "Lima", "Cusco", "Bogota", "Medellin"};
 
 const char *district[200] = {
     "Ba Đình", "Quận 1", "Hải Châu", "Ngô Quyền", "Ninh Kiều", "Lộc Thọ", "Dĩ An", "Biên Hòa",
@@ -108,8 +107,7 @@ const char *district[200] = {
     "Garden City", "Montaza", "Haram", "Karnak", "Nubian Village", "Gueliz", "Anfa", "Fes el Bali", "Hassan", "Kasbah",
     "Camps Bay", "Sandton", "Umhlanga", "Arcadia", "Summerstrand", "Westlands", "Nyali", "Victoria Island", "Asokoro", "Osu",
     "Condesa", "Zona Hotelera", "Chapultepec", "Zona Rio", "San Pedro Garza García", "Ipanema", "Vila Madalena", "Pelourinho", "Asa Sul", "Praia de Iracema",
-    "Recoleta", "Plaza Independencia", "Nueva Córdoba", "Fisherton", "Lastarria", "Cerro Alegre", "Miraflores", "San Blas", "La Candelaria", "El Poblado"
-};
+    "Recoleta", "Plaza Independencia", "Nueva Córdoba", "Fisherton", "Lastarria", "Cerro Alegre", "Miraflores", "San Blas", "La Candelaria", "El Poblado"};
 
 const char *address[200] = {
     "12 Điện Biên Phủ", "21 Nguyễn Trãi", "34 Bạch Đằng", "56 Lạch Tray", "78 Hòa Bình", "90 Trần Phú",
@@ -138,8 +136,7 @@ const char *address[200] = {
     "161 Corniche El Nil", "162 El-Gaish Road", "163 Al-Haram Street", "164 Maabad al-Karnak", "165 Gharb Seheil", "166 Avenue Mohammed V", "167 Boulevard de la Corniche", "168 Talaa Kebira", "169 Avenue Chellah", "170 Rue de la Kasbah",
     "171 Victoria Road", "172 5th Street", "173 Lighthouse Road", "174 Stanza Bopape Street", "175 Marine Drive", "176 Waiyaki Way", "177 Links Road", "178 Adeola Odeku Street", "179 Yakubu Gowon Crescent", "180 Oxford Street",
     "181 Av. Amsterdam", "182 Blvd. Kukulcan", "183 Av. Chapultepec", "184 Paseo de los Héroes", "185 Av. José Vasconcelos", "186 Rua Vinicius de Moraes", "187 Rua Aspicuelta", "188 Largo do Pelourinho", "189 CLS 105", "190 Av. Beira Mar",
-    "191 Avenida Alvear", "192 Arístides Villanueva", "193 Hipólito Yrigoyen", "194 Bv. Argentino", "195 José Victorino Lastarria", "196 Paseo Dimalow", "197 Av. José Larco", "198 Cuesta de San Blas", "199 Carrera 3", "200 Carrera 43A"
-};
+    "191 Avenida Alvear", "192 Arístides Villanueva", "193 Hipólito Yrigoyen", "194 Bv. Argentino", "195 José Victorino Lastarria", "196 Paseo Dimalow", "197 Av. José Larco", "198 Cuesta de San Blas", "199 Carrera 3", "200 Carrera 43A"};
 
 const char *credit_card[200] = {
     "4552 0000 1123 5813", "5424 0001 2134 8914", "4929 0002 3455 1442", "6011 0003 5589 2334", "4111 0004 8914 3770",
@@ -181,8 +178,7 @@ const char *credit_card[200] = {
     "4111 0180 4374 7656", "5252 0181 5468 8750", "4222 0182 6562 9844", "5123 0183 7656 1028", "4552 0184 8750 2122",
     "5424 0185 9844 3216", "4929 0186 1028 4310", "6011 0187 2122 5404", "4111 0188 3216 6498", "5252 0189 4310 7592",
     "4222 0190 5404 8686", "5123 0191 6498 9780", "4552 0192 7592 1074", "5424 0193 8686 2168", "4929 0194 9780 3262",
-    "6011 0195 1074 4356", "4111 0196 2168 5450", "5252 0197 3262 6544", "4222 0198 4356 7638", "5123 0199 5450 8732"
-};
+    "6011 0195 1074 4356", "4111 0196 2168 5450", "5252 0197 3262 6544", "4222 0198 4356 7638", "5123 0199 5450 8732"};
 
 const char *dob[200] = {
     "1990-01-15", "1981-05-20", "1995-02-10", "1988-11-30", "1995-07-25", "1971-04-12", "1982-01-05", "1989-09-18",
@@ -208,12 +204,10 @@ const char *dob[200] = {
     "1984-01-31", "1985-02-01", "1986-03-02", "1987-04-03", "1988-05-04", "1989-06-05", "2000-07-06", "2001-08-07", "2002-09-08", "1990-10-09",
     "1991-11-10", "1992-12-11", "1993-01-12", "1994-02-13", "1995-03-14", "1996-04-15", "1997-05-16", "1998-06-17", "1999-07-18", "1980-08-19",
     "1981-09-20", "1982-10-21", "1983-11-22", "1984-12-23", "1985-01-24", "1986-02-25", "1987-03-26", "1988-04-27", "1989-05-28", "2000-06-29",
-    "2001-07-30", "2002-08-31", "1990-09-01", "1991-10-02", "1992-11-03", "1993-12-04", "1994-01-05", "1995-02-06", "1996-03-07", "1997-04-08"
-};
+    "2001-07-30", "2002-08-31", "1990-09-01", "1991-10-02", "1992-11-03", "1993-12-04", "1994-01-05", "1995-02-06", "1996-03-07", "1997-04-08"};
 
 const char *gender[2] = {
-    "M", "F"
-};
+    "M", "F"};
 
 /**
  * @brief Tạo và trả về một SĐT ngẫu nhiên có đầu số Việt Nam.
@@ -221,22 +215,24 @@ const char *gender[2] = {
  * !! CẢNH BÁO: Hàm không an toàn khi gọi nhiều lần trong cùng một biểu thức.
  * @return Con trỏ (char*) tới một chuỗi SĐT.
  */
-char* gen_phone_number() {
+char *gen_phone_number()
+{
     // Biến static chỉ được khởi tạo một lần và tồn tại suốt chương trình.
     static char sdt_buffer[11]; // 10 cho số, 1 cho ký tự '\0'
 
     // 1. Danh sách các đầu số di động hợp lệ của Việt Nam
-    const char* dau_so[] = {"090", "091", "098", "086", "077", "059", "035", "038"};
+    const char *dau_so[] = {"090", "091", "098", "086", "077", "059", "035", "038"};
     int so_luong_dau_so = sizeof(dau_so) / sizeof(dau_so[0]);
 
     // 2. Chọn ngẫu nhiên một đầu số
-    const char* dau_so_duoc_chon = dau_so[rand() % so_luong_dau_so];
+    const char *dau_so_duoc_chon = dau_so[rand() % so_luong_dau_so];
 
     // 3. Sao chép đầu số đã chọn vào buffer
     strcpy(sdt_buffer, dau_so_duoc_chon);
 
     // 4. Tạo 7 chữ số còn lại (vì đầu số đã có 3 chữ số)
-    for (int i = 3; i < 10; i++) {
+    for (int i = 3; i < 10; i++)
+    {
         sdt_buffer[i] = (rand() % 10) + '0';
     }
 
@@ -250,17 +246,19 @@ char* gen_phone_number() {
  * @brief Tạo username ngẫu nhiên (6-10 ký tự chữ và số).
  * @return Con trỏ tới buffer tĩnh chứa username.
  */
-char* gen_username() {
+char *gen_username()
+{
     static char user_buffer[11]; // Tối đa 10 ký tự + '\0'
-    const char* charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+    const char *charset = "abcdefghijklmnopqrstuvwxyz0123456789";
     int charset_len = strlen(charset);
-    
+
     int len = (rand() % 5) + 6; // Độ dài từ 6 đến 10
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++)
+    {
         user_buffer[i] = charset[rand() % charset_len];
     }
     user_buffer[len] = '\0'; // Đặt ký tự kết thúc
-    
+
     return user_buffer;
 }
 
@@ -268,13 +266,15 @@ char* gen_username() {
  * @brief Tạo password ngẫu nhiên mạnh (12-20 ký tự chữ, số, ký tự đặc biệt).
  * @return Con trỏ tới buffer tĩnh chứa password.
  */
-char* gen_password() {
+char *gen_password()
+{
     static char pass_buffer[21]; // Tối đa 20 ký tự + '\0'
-    const char* charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@";
+    const char *charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@";
     int charset_len = strlen(charset);
 
     int len = (rand() % 12) + 8; // Độ dài từ 8 đến 20
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++)
+    {
         pass_buffer[i] = charset[rand() % charset_len];
     }
     pass_buffer[len] = '\0'; // Đặt ký tự kết thúc
@@ -286,25 +286,28 @@ char* gen_password() {
  * @brief Tạo email ngẫu nhiên đuôi @gmail.com. Hàm này tự tạo phần username.
  * @return Con trỏ tới buffer tĩnh chứa email.
  */
-char* gen_email() {
+char *gen_email()
+{
     static char email_buffer[31]; // Tối đa 30 ký tự + '\0'
-    const char* charset = "abcdefghijklmnopqrstuvwxyz0123456789";
-    const char* domain = "@gmail.com";
+    const char *charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+    const char *domain = "@gmail.com";
     int charset_len = strlen(charset);
 
     // Tự tạo phần username riêng, không gọi hàm tao_username_static()
     int username_len = (rand() % 5) + 6; // Độ dài từ 6 đến 10
-    for (int i = 0; i < username_len; i++) {
+    for (int i = 0; i < username_len; i++)
+    {
         email_buffer[i] = charset[rand() % charset_len];
     }
-    
+
     // Nối đuôi domain vào
     strcpy(&email_buffer[username_len], domain);
-    
+
     return email_buffer;
 }
 
-int main() {
+int main()
+{
     // 1. Khởi tạo hạt giống cho bộ tạo số ngẫu nhiên
     // Chỉ cần gọi srand() một lần duy nhất khi bắt đầu chương trình.
     srand((unsigned int)time(NULL));
@@ -316,25 +319,60 @@ int main() {
     filePointer = fopen("shoestore.sql", "w");
 
     // Kiểm tra xem file có mở thành công không
-    if (filePointer == NULL) {
+    if (filePointer == NULL)
+    {
         printf("Không thể mở file.\n");
         return 1; // Trả về mã lỗi
     }
 
-    for (int i = 0; i < 100; i++) {
-        //cuối dòng là dấu ,
-        if(i != 99) fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n"/*dấu , cuối dòng*/, 
-            i + 1, first_name[random_int(0, 199)], last_name[random_int(0, 199)], 
-            address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)], 
-            gen_phone_number(), gen_email(), credit_card[random_int(0, 199)], 
-            dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
-        
-        //cuối dòng là dấu;
-        else fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n"/*dấu ; cuối dòng*/, 
-            i + 1, first_name[random_int(0, 199)], last_name[random_int(0, 199)], 
-            address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)], 
-            gen_phone_number(), gen_email(), credit_card[random_int(0, 199)], 
-            dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
+    for (int i = 0; i < 100; i++)
+    {
+        // cuối dòng là dấu ,
+        if (i != 99)
+            fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n" /*dấu , cuối dòng*/,
+                    i + 1, first_name[random_int(0, 199)], last_name[random_int(0, 199)],
+                    address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
+                    gen_phone_number(), gen_email(), credit_card[random_int(0, 199)],
+                    dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
+
+        // cuối dòng là dấu;
+        else
+            fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n" /*dấu ; cuối dòng*/,
+                    i + 1, first_name[random_int(0, 199)], last_name[random_int(0, 199)],
+                    address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
+                    gen_phone_number(), gen_email(), credit_card[random_int(0, 199)],
+                    dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
+    }
+
+    // Tạo dữ liệu cho bảng employee
+    fprintf(filePointer, "\n-- Insert employees\nINSERT INTO employee (employee_id, first_name, last_name, dob, phone_number, email, username, password) VALUES\n");
+
+    for (int i = 0; i < 50; i++)
+    {
+        if (i != 49)
+        {
+            fprintf(filePointer, "(%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n",
+                    i + 1,
+                    first_name[random_int(0, 199)],
+                    last_name[random_int(0, 199)],
+                    dob[random_int(0, 199)],
+                    gen_phone_number(),
+                    gen_email(),
+                    gen_username(),
+                    gen_password());
+        }
+        else
+        {
+            fprintf(filePointer, "(%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n",
+                    i + 1,
+                    first_name[random_int(0, 199)],
+                    last_name[random_int(0, 199)],
+                    dob[random_int(0, 199)],
+                    gen_phone_number(),
+                    gen_email(),
+                    gen_username(),
+                    gen_password());
+        }
     }
 
     // Đóng file sau khi hoàn thành việc ghi.
