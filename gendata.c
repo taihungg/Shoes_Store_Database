@@ -306,6 +306,44 @@ char *gen_email()
     return email_buffer;
 }
 
+// Helper functions để tạo dữ liệu ngẫu nhiên
+char *gen_order_status()
+{
+    static const char *statuses[] = {
+        "Pending", "Processing", "Completed", "Cancelled", "Delivered"};
+    return (char *)statuses[rand() % 5];
+}
+
+char *gen_payment_method()
+{
+    static const char *methods[] = {
+        "Cash", "Credit Card", "Bank Transfer", "E-wallet"};
+    return (char *)methods[rand() % 4];
+}
+
+char *gen_payment_status()
+{
+    static const char *statuses[] = {
+        "Paid", "Pending", "Failed", "Refunded"};
+    return (char *)statuses[rand() % 4];
+}
+
+char *gen_feedback_text()
+{
+    static const char *feedbacks[] = {
+        "Great product, very satisfied!",
+        "Good quality but a bit expensive",
+        "Nice shoes, fast delivery",
+        "Product matches the description",
+        "Excellent service",
+        "Would buy again",
+        "Perfect fit",
+        "Good value for money",
+        "Better than expected",
+        "Highly recommended"};
+    return (char *)feedbacks[rand() % 10];
+}
+
 int main()
 {
     // 1. Khởi tạo hạt giống cho bộ tạo số ngẫu nhiên
@@ -375,6 +413,70 @@ int main()
         }
     }
 
+    // Tạo orders (100 records)
+    fprintf(filePointer, "\n-- Insert orders\nINSERT INTO `order` (order_id, customer_id, employee_id, total_amount, total_discount, final_amount, order_date, status, payment_method, payment_status, note) VALUES\n");
+
+    for (int i = 0; i < 100; i++)
+    {
+        double total = random_double(1000000, 10000000); // 1-10 triệu
+        double discount = total * random_double(0, 0.3); // giảm giá tối đa 30%
+        double final = total - discount;
+
+        fprintf(filePointer, "(%d, %d, %d, %.2f, %.2f, %.2f, '2025-0%d-%02d', '%s', '%s', '%s', NULL)%s\n",
+                i + 1,              // order_id
+                random_int(1, 100), // customer_id (1-100)
+                random_int(1, 50),  // employee_id (1-50)
+                total, discount, final,
+                random_int(1, 6),  // month (1-6)
+                random_int(1, 28), // day (1-28)
+                gen_order_status(),
+                gen_payment_method(),
+                gen_payment_status(),
+                i == 99 ? ";" : ",");
+    }
+
+    // Tạo order details (300 records, mỗi order 2-4 items)
+    fprintf(filePointer, "\n-- Insert order details\nINSERT INTO orderdetail (orderdetail_id, order_id, variant_id, quantity, unit_price, discount, sub_total) VALUES\n");
+
+    int orderdetail_id = 1;
+    for (int order_id = 1; order_id <= 100; order_id++)
+    {
+        int num_items = random_int(2, 4); // 2-4 items per order
+
+        for (int j = 0; j < num_items; j++)
+        {
+            int quantity = random_int(1, 5);
+            double unit_price = random_double(500000, 2000000);        // 500k-2M mỗi đơn vị
+            double item_discount = unit_price * random_double(0, 0.2); // giảm giá tối đa 20%
+            double sub_total = (quantity * unit_price) - item_discount;
+
+            fprintf(filePointer, "(%d, %d, %d, %d, %.2f, %.2f, %.2f)%s\n",
+                    orderdetail_id,
+                    order_id,
+                    random_int(1, 70), // variant_id (giả sử có 70 variants)
+                    quantity,
+                    unit_price,
+                    item_discount,
+                    sub_total,
+                    (order_id == 100 && j == num_items - 1) ? ";" : ",");
+            orderdetail_id++;
+        }
+    }
+
+    // Tạo feedbacks (200 records)
+    fprintf(filePointer, "\n-- Insert feedbacks\nINSERT INTO feedback (feedback_id, orderdetail_id, feedback, rating, feedback_date) VALUES\n");
+
+    for (int i = 0; i < 200; i++)
+    {
+        fprintf(filePointer, "(%d, %d, '%s', %d, '2025-0%d-%02d')%s\n",
+                i + 1,
+                random_int(1, orderdetail_id - 1), // orderdetail_id từ các details đã tạo
+                gen_feedback_text(),
+                random_int(1, 5),  // rating 1-5 sao
+                random_int(1, 6),  // month (1-6)
+                random_int(1, 28), // day (1-28)
+                i == 199 ? ";" : ",");
+    }
     // Đóng file sau khi hoàn thành việc ghi.
     // Điều này rất quan trọng để đảm bảo tất cả dữ liệu được lưu vào file và giải phóng tài nguyên.
     fclose(filePointer);
