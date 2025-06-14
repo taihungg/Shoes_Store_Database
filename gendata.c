@@ -3,6 +3,10 @@
 #include <time.h>   // Cho time()
 #include <string.h> // Cần thiết cho hàm strcpy
 
+char customer_ids[99999][9];
+char product_ids[999999][9];
+char variant_ids[9999999][9];
+
 // Ham tao so ngau nhien trong mot khoang
 int random_int(int min, int max)
 {
@@ -209,12 +213,302 @@ const char *dob[200] = {
 const char *gender[2] = {
     "M", "F"
 };
-const char* category_name[200]={
-    "New Arrivals - Women's Shoes", "Classic Women's Shoes", "New Arrivals - Men's Shoes", "Popular Men's Shoes", "Girls' Kids' Shoes", "Boys' Kids' Shoes", "Unisex Shoes", "Premium Women's Shoes", "Men's Business Shoes", "Infant Shoes", "Teen Girls' Shoes", "Teen Boys' Shoes", "Elderly Footwear", "Women's Athletic Shoes", "Men's Athletic Shoes", "Sneakers", "Boots", "Sandals", "Loafers", "High Heels", "Flats", "Dress Shoes", "Leather Shoes", "Canvas Shoes", "Mesh Shoes", "Flip-Flops", "Slides", "Ballet Flats", "Pointed-Toe Shoes", "Mary Jane Shoes", "Oxford Shoes", "Derby Shoes", "Monk Strap Shoes", "Brogues", "Espadrilles", "Ankle Boots", "Chelsea Boots", "Cowboy Boots", "Hiking Boots", "Slippers", "Mules", "Chunky Sneakers", "Minimalist Sneakers", "Slip-On Shoes", "Women's Flats", "Women's High Heels", "Women's Sneakers", "Men's Sneakers", "Men's Leather Shoes", "Running Shoes", "Gym Shoes", "Walking Shoes", "Climbing Shoes", "Soccer Cleats", "Basketball Shoes", "Badminton Shoes", "Tennis Shoes", "Golf Shoes", "Fashion Footwear", "Office Shoes", "Party Shoes", "Wedding Shoes", "Travel Shoes", "Beach Footwear", "School Shoes", "Casual Shoes", "Everyday Wear", "Safety Shoes", "Skateboarding Shoes", "Rain Boots", "Camping Footwear", "Work Shoes", "Dance Shoes", "Ballet Shoes", "Golf Shoes", "Uniform Shoes", "Nurse Shoes", "Chef Shoes", "Construction Boots", "All-Terrain Shoes", "Korean Style Shoes", "Vintage Style Shoes", "Bohemian Style Shoes", "Streetwear Shoes", "Minimalist Shoes", "Sporty Shoes", "Luxury Footwear", "Unique Style Shoes", "New Trend Shoes", "High Fashion Footwear", "Designer Shoes", "Retro Shoes", "Futuristic Footwear", "Classic Shoes", "Modern Footwear", "New Classic Shoes", "Monochromatic Shoes", "Color-Blocked Shoes", "Dynamic Footwear", "Elegant Shoes", "Seductive Heels", "Bold Footwear", "Genuine Leather Shoes", "Suede Shoes", "Canvas Shoes", "Mesh Footwear", "Rubber Shoes", "Synthetic Shoes", "Vegan Leather Shoes", "Knit Shoes", "Plastic Footwear", "Cotton Shoes", "Wool Shoes", "EVA Footwear", "PU Shoes", "Microfiber Shoes", "Waterproof Shoes", "Summer Shoes", "Winter Boots", "Spring Footwear", "Autumn Shoes", "Snow Boots", "Water-Resistant Shoes", "Breathable Shoes", "Warm Footwear", "Sunlight Shoes", "All-Season Footwear", "Memory Foam Shoes", "Anti-Slip Shoes", "Ultralight Shoes", "Shock Absorbing Shoes", "Arch Support Shoes", "Air Cushioned Shoes", "Height Increasing Shoes", "Impact Protection Shoes", "Comfort Shoes", "Easy-Wear Footwear", "Quick-Dry Shoes", "Anti-Odor Shoes", "Recycled Footwear", "Durable Shoes", "Ergonomic Shoes", "Flexible Footwear", "Balanced Shoes", "Large Size Shoes", "Small Size Shoes", "Wide Foot Shoes", "Narrow Foot Shoes", "Big Toe Friendly Shoes", "Flat Foot Shoes", "High Arch Shoes", "Pain Relief Shoes", "Wide Fit", "Narrow Fit", "Best Selling Shoes", "Sale Shoes", "New Arrivals", "Exclusive Shoes", "Limited Edition Shoes", "Bestsellers", "Hot Trend Shoes", "Promotional Shoes", "Clearance Shoes", "Couple Shoes", "Brand Name Shoes", "Affordable Footwear", "Customizable Shoes", "Shoe Accessories", "Shoelaces", "Insoles", "Shoe Care Products", "Gift Shoes", "Occasion Specific Shoes", "Matching Footwear", "Marathon Running Shoes", "Yoga Footwear", "Athlete Shoes", "High-Top Shoes", "Low-Top Shoes", "Boot-Style Shoes", "Platform Shoes", "Wedge Heels", "Elevated Soles", "Backless Loafers", "Active Sport Shoes", "Weekly Drops", "Pre-Order Shoes", "Custom Orders", "Leather Goods", "Faux Leather Shoes", "Suede Footwear", "Velvet Shoes", "Lace Shoes", "Glitter Shoes", "Crystal Embellished Shoes", "Patterned Shoes", "Rhinestone Shoes", "Reflective Shoes", "LED Light Shoes", "Height Boosting Footwear"
-};
-const char* brand_name[200] = {
-    "Nike", "Adidas", "Puma", "New Balance", "Converse", "Vans", "Reebok", "Skechers", "Asics", "Brooks", "Gucci", "Louis Vuitton", "Balenciaga", "Prada", "Versace", "Christian Louboutin", "Jimmy Choo", "Manolo Blahnik", "Saint Laurent", "Alexander McQueen", "Fendi", "Dolce & Gabbana", "Burberry", "Valentino", "Givenchy", "Bottega Veneta", "Off-White", "Golden Goose", "Common Projects", "Tod's", "Toms", "Crocs", "Birkenstock", "Dr. Martens", "Timberland", "Ugg", "Hush Puppies", "Clarks", "Sperry", "Keds", "Roxy", "Quiksilver", "DC Shoes", "Globe", "Etnies", "Supra", "Emerica", "Lakia", "Vionic", "Sanuk", "Hoka", "Saucony", "Mizuno", "Under Armour", "Salomon", "Altra", "On Running", "Newton Running", "Topo Athletic", "Karhu", "Merrell", "Columbia", "Keen", "The North Face", "Lowa", "Scarpa", "La Sportiva", "Vasque", "Oboz", "Danner", "Caterpillar", "Red Wing Shoes", "Timberland PRO", "Dickies", "Thorogood", "Wolverine", "Bates", "Danner Work", "Georgia Boot", "Carhartt", "Stride Rite", "See Kai Run", "Pablosky", "Geox Kids", "Pediped", "Robeez", "Mini Melissa", "Bobux", "Primigi", "Superfit", "Dansko", "Blundstone", "Ryka", "Vivobarefoot", "Xero Shoes", "Oofos", "Chaco", "Teva", "FitFlop", "Brooks Brothers"
-};
+
+const char *categories[50][2] = {
+        // --- Phân loại theo người dùng ---
+        {"MENS", "Giày Nam"},
+        {"WMNS", "Giày Nữ"},
+        {"UNIS", "Giày Unisex (Cho cả Nam và Nữ)"},
+        {"KIDS", "Giày Trẻ Em"},
+        {"BOYS", "Giày Bé Trai"},
+        {"GIRL", "Giày Bé Gái"},
+
+        // --- Giày thể thao & chuyên dụng ---
+        {"RUN", "Giày Chạy Bộ"},
+        {"GYM", "Giày Tập Gym & Fitness"},
+        {"WALK", "Giày Đi Bộ"},
+        {"BASK", "Giày Bóng Rổ"},
+        {"FTBL", "Giày Đá Bóng"},
+        {"TENN", "Giày Tennis"},
+        {"HIKE", "Giày Leo Núi (Hiking)"},
+        {"SKTE", "Giày Trượt Ván"},
+        {"GOLF", "Giày Chơi Golf"},
+        
+        // --- Giày dép thông thường (Casual) ---
+        {"SNKR", "Giày Sneaker"},
+        {"LIFE", "Giày Thời Trang Hàng Ngày"},
+        {"SLIP", "Giày Slip-On (Không dây)"},
+        {"LOAF", "Giày Lười"},
+        {"CANV", "Giày Vải"},
+        {"BOAT", "Giày Lái Thuyền"},
+        {"MULE", "Giày Sục (Hở gót)"},
+        
+        // --- Giày trang trọng (Formal) ---
+        {"DRES", "Giày Tây"},
+        {"OXFD", "Giày Oxford"},
+        {"DRBY", "Giày Derby"},
+        {"MONK", "Giày Monk Strap"},
+        
+        // --- Các loại Bốt (Boots) ---
+        {"ANKL", "Bốt Cổ Ngắn"},
+        {"CHLS", "Bốt Chelsea"},
+        {"CHKA", "Bốt Chukka"},
+        {"CMBT", "Bốt Chiến Binh"},
+        {"WORK", "Bốt Bảo Hộ"},
+        {"RAIN", "Ủng Đi Mưa"},
+        
+        // --- Giày dép hở ngón & Sandal ---
+        {"SAND", "Dép Sandal"},
+        {"FLIP", "Dép Kẹp / Dép Xỏ Ngón"},
+        {"SLDE", "Dép Quai Ngang"},
+        {"CLOG", "Dép Sục / Guốc Gỗ"},
+        {"GLAD", "Sandal Chiến Binh"},
+
+        // --- Giày dép đặc thù của nữ ---
+        {"HEEL", "Giày Cao Gót"},
+        {"PUMP", "Giày Gót Nhọn (Pumps)"},
+        {"STIL", "Giày Gót Siêu Nhọn (Stilettos)"},
+        {"WDGE", "Giày Đế Xuồng"},
+        {"PLAT", "Giày Đế Bánh Mì"},
+        {"FLAT", "Giày Búp Bê"},
+        {"MARY", "Giày Mary Jane"},
+        
+        // --- Giày dép chuyên dụng khác ---
+        {"SLPR", "Dép Đi Trong Nhà"},
+        {"BECH", "Dép Đi Biển"},
+        {"ORTH", "Giày Y Tế (Chỉnh hình)"},
+        
+        // --- Phụ kiện giày dép ---
+        {"CARE", "Sản Phẩm Chăm Sóc Giày"},
+        {"SOLE", "Lót Giày"},
+        {"LACE", "Dây Giày"}
+    };
+
+const char *brands[200][2] = {
+        // === Nhóm 1: Thương hiệu Thể thao & Dã ngoại (Athletic & Outdoor) === (25)
+        {"NIKE", "Nike"},
+        {"ADID", "Adidas"},
+        {"PUMA", "Puma"},
+        {"RBOK", "Reebok"},
+        {"NB", "New Balance"},
+        {"ASCS", "ASICS"},
+        {"UA", "Under Armour"},
+        {"SKEC", "Skechers"},
+        {"FILA", "Fila"},
+        {"MZNO", "Mizuno"},
+        {"LNNG", "Li-Ning"},
+        {"ANTA", "Anta"},
+        {"BRKS", "Brooks Running"},
+        {"SAUC", "Saucony"},
+        {"HOKA", "Hoka"},
+        {"ON", "On Running"},
+        {"ALTR", "Altra Running"},
+        {"SALO", "Salomon"},
+        {"MERL", "Merrell"},
+        {"TNF", "The North Face"},
+        {"CLMB", "Columbia"},
+        {"KEEN", "KEEN"},
+        {"LASP", "La Sportiva"},
+        {"PATA", "Patagonia Footwear"},
+        {"LULU", "Lululemon"},
+
+        // === Nhóm 2: Thời trang Đường phố & Thông dụng (Streetwear & Casual) === (15)
+        {"CONS", "Converse"},
+        {"VANS", "Vans"},
+        {"PLDM", "Palladium"},
+        {"SPGA", "Superga"},
+        {"KEDS", "Keds"},
+        {"TOMS", "TOMS"},
+        {"SPRY", "Sperry Top-Sider"},
+        {"SBGO", "Sebago"},
+        {"DC", "DC Shoes"},
+        {"ETNS", "Etnies"},
+        {"GLOB", "Globe"},
+        {"SPRA", "Supra"},
+        {"KSW", "K-Swiss"},
+        {"CHMP", "Champion"},
+        {"GOLA", "Gola"},
+
+        // === Nhóm 3: Thương hiệu Việt Nam & Quen thuộc tại VN === (10)
+        {"BITS", "Bitis"},
+        {"ANAS", "Ananas"},
+        {"RNVN", "RieNevan"},
+        {"VNG", "Vina Giầy"},
+        {"JUNO", "Juno"},
+        {"VASC", "Vascara"},
+        {"MWC", "MWC"},
+        {"DOHI", "Giày Đông Hải"},
+        {"BITA", "Bitas"},
+        {"HOTH", "Giày Hồng Thạnh"},
+
+        // === Nhóm 4: Bốt & Giày Da (Boots & Leather) === (10)
+        {"DRM", "Dr. Martens"},
+        {"TMBL", "Timberland"},
+        {"CLRK", "Clarks"},
+        {"RWS", "Red Wing Shoes"},
+        {"WOLV", "Wolverine"},
+        {"CHIP", "Chippewa Boots"},
+        {"UGG", "UGG"},
+        {"BLUN", "Blundstone"},
+        {"THUR", "Thursday Boot Company"},
+        {"FRYE", "Frye Company"},
+
+        // === Nhóm 5: Tiện dụng & Thoải mái (Comfort & Utility) === (15)
+        {"CROC", "Crocs"},
+        {"BIRK", "Birkenstock"},
+        {"ECCO", "ECCO"},
+        {"GEOX", "Geox"},
+        {"HUSH", "Hush Puppies"},
+        {"RCKP", "Rockport"},
+        {"NATU", "Naturalizer"},
+        {"AERO", "Aerosoles"},
+        {"FITF", "FitFlop"},
+        {"MEPH", "Mephisto"},
+        {"DANS", "Dansko"},
+        {"SNUK", "Sanuk"},
+        {"TEVA", "Teva"},
+        {"CHAC", "Chaco"},
+        {"OOF", "OOFOS"},
+
+        // === Nhóm 6: Thời trang Phổ thông & Cận Cao cấp (Mainstream & Accessible Luxury) === (20)
+        {"ALDO", "ALDO"},
+        {"SM", "Steve Madden"},
+        {"NINE", "Nine West"},
+        {"CK", "Charles & Keith"},
+        {"PDRO", "Pedro"},
+        {"LACO", "Lacoste"},
+        {"TOMY", "Tommy Hilfiger"},
+        {"CKLN", "Calvin Klein"},
+        {"PRL", "Polo Ralph Lauren"},
+        {"MK", "Michael Kors"},
+        {"KATE", "Kate Spade New York"},
+        {"TORY", "Tory Burch"},
+        {"COAC", "Coach"},
+        {"COLE", "Cole Haan"},
+        {"JM", "Johnston & Murphy"},
+        {"FLOR", "Florsheim"},
+        {"KCOL", "Kenneth Cole"},
+        {"VC", "Vince Camuto"},
+        {"SE", "Sam Edelman"},
+        {"GUES", "GUESS"},
+
+        // === Nhóm 7: Thương hiệu Bền vững & Thân thiện Môi trường (Sustainable & Eco-Friendly) === (10)
+        {"BIRD", "Allbirds"},
+        {"VEJA", "Veja"},
+        {"PGFA", "Patagonia Footwear"},
+        {"POZU", "Po-Zu"},
+        {"CARI", "Cariuma"},
+        {"NONU", "Nothing New"},
+        {"ETIK", "Etiko"},
+        {"INDO", "Indosole"},
+        {"SAOL", "SAOLA"},
+        {"ROTH", "Rothys"},
+        
+        // === Nhóm 8: Thương hiệu Nhật Bản === (8)
+        {"OT", "Onitsuka Tiger"},
+        {"Y3", "Y-3 (Yohji Yamamoto x Adidas)"},
+        {"VSVM", "Visvim"},
+        {"CDGP", "Comme des Garçons PLAY"},
+        {"BAPE", "A Bathing Ape (BAPE)"},
+        {"RFW", "RFW Tokyo"},
+        {"MOON", "Moonstar"},
+        {"HEND", "Hender Scheme"},
+
+        // === Nhóm 9: Thương hiệu Châu Âu (Anh, Ý, Pháp...) === (20)
+        {"LOAK", "Loake Shoemakers"},
+        {"CHEA", "Joseph Cheaney & Sons"},
+        {"CHUR", "Churchs"},
+        {"GREN", "Grenson"},
+        {"TRCK", "Trickers"},
+        {"BARK", "Barker England"},
+        {"TODS", "Tods"},
+        {"HOGN", "Hogan"},
+        {"SANT", "Santoni"},
+        {"MGNI", "Magnanni"},
+        {"CARM", "Carmina Shoemaker"},
+        {"LLOY", "LLOYD"},
+        {"GABR", "Gabor"},
+        {"SIOU", "Sioux"},
+        {"REPE", "Repetto"},
+        {"AMIP", "Ami Paris"},
+        {"CPRO", "Common Projects"},
+        {"GGDB", "Golden Goose"},
+        {"FAGO", "Faguo"},
+        {"ZESP", "Zespà"},
+
+        // === Nhóm 10: Thương hiệu Xa xỉ (Luxury) === (25)
+        {"GUCI", "Gucci"},
+        {"BALC", "Balenciaga"},
+        {"PRDA", "Prada"},
+        {"LV", "Louis Vuitton"},
+        {"LBTN", "Christian Louboutin"},
+        {"CHOO", "Jimmy Choo"},
+        {"AMQ", "Alexander McQueen"},
+        {"VLNT", "Valentino Garavani"},
+        {"YSL", "Saint Laurent"},
+        {"VERS", "Versace"},
+        {"FEND", "Fendi"},
+        {"BVEN", "Bottega Veneta"},
+        {"FERO", "Salvatore Ferragamo"},
+        {"SROS", "Sergio Rossi"},
+        {"GZAN", "Giuseppe Zanotti"},
+        {"MBLK", "Manolo Blahnik"},
+        {"BRLT", "Berluti"},
+        {"JLOB", "John Lobb"},
+        {"EGRN", "Edward Green"},
+        {"FORD", "Tom Ford"},
+        {"DIOR", "Dior"},
+        {"CHAN", "Chanel"},
+        {"HRMS", "Hermès"},
+        {"CELN", "Celine"},
+        {"GIVN", "Givenchy"},
+        
+        // === Nhóm 11: Bổ sung các thương hiệu khác === (15)
+        {"HAVA", "Havaianas"},
+        {"IPAN", "Ipanema"},
+        {"GRDA", "Grendha"}, // **SỬA LỖI: Đã đổi ID từ GREN thành GRDA**
+        {"CAMP", "Camper"},
+        {"DIES", "Diesel"},
+        {"GSTR", "G-Star RAW"},
+        {"FP", "Fred Perry"},
+        {"BSHR", "Ben Sherman"},
+        {"PS", "Paul Smith"},
+        {"EA", "Emporio Armani / EA7"},
+        {"BOSS", "BOSS / HUGO"},
+        {"TBAK", "Ted Baker"},
+        {"KGEI", "Kurt Geiger"},
+        {"AQUA", "Aquatalia"},
+        {"SW", "Stuart Weitzman"},
+        
+        // === Nhóm 12: Bổ sung thêm cho đủ 200 === (27)
+        {"ARCT", "Arcteryx"},
+        {"ASOL", "Asolo"},
+        {"BALY", "Bally"},
+        {"CAT", "Caterpillar"},
+        {"DIAD", "Diadora"},
+        {"DUNL", "Dunlop"},
+        {"EVIS", "Evisu"},
+        {"GANT", "Gant"},
+        {"HTEC", "Hi-Tec"},
+        {"HUMM", "Hummel"},
+        {"JJ", "Jack & Jones"},
+        {"JMW", "J.M. Weston"},
+        {"KAPA", "Kappa"},
+        {"KARH", "Karhu"},
+        {"KICK", "Kickers"},
+        {"LOTO", "Lotto"},
+        {"MEIN", "Meindl"},
+        {"NROK", "New Rock"},
+        {"PARA", "Paraboot"},
+        {"PEPE", "Pepe Jeans"},
+        {"PCAR", "Pierre Cardin"},
+        {"PIKO", "Pikolinos"},
+        {"RIDR", "Rider"},
+        {"RMW", "R.M. Williams"},
+        {"SREL", "Sorel"},
+        {"SDRY", "Superdry"},
+        {"UMBR", "Umbro"}
+    };
 const char* country_of_origin[200] = {
     "Trung Quốc", "Việt Nam", "Ý", "Ấn Độ", "Indonesia", "Brazil", "Thổ Nhĩ Kỳ", "Mexico", "Pakistan", "Bồ Đào Nha", "Tây Ban Nha", "Đức", "Hoa Kỳ", "Anh", "Pháp", "Nhật Bản", "Hàn Quốc", "Thái Lan", "Campuchia", "Myanmar", "Bangladesh", "Srilanka", "Ai Cập", "Ethiopia", "Nam Phi", "Kenya", "Maroc", "Tunisia", "Romania", "Ba Lan", "Slovakia", "Cộng hòa Séc", "Hungary", "Ukraine", "Nga", "Belarus", "Serbia", "Bosnia và Herzegovina", "Croatia", "Slovenia", "Albania", "Macedonia", "Bulgaria", "Hy Lạp", "Áo", "Bỉ", "Hà Lan", "Thụy Sĩ", "Thụy Điển", "Na Uy", "Phần Lan", "Đan Mạch", "Canada", "Argentina", "Colombia", "Peru", "Chile", "Ecuador", "Venezuela", "Uruguay", "Paraguay", "Bolivia", "Cuba", "Dominican Republic", "Haiti", "Guatemala", "Honduras", "El Salvador", "Nicaragua", "Costa Rica", "Panama", "Úc", "New Zealand", "Fiji", "Papua New Guinea", "Philippines", "Malaysia", "Singapore", "Đài Loan", "Hồng Kông", "Các Tiểu Vương quốc Ả Rập Thống nhất", "Ả Rập Xê Út", "Iran", "Israel", "Jordan", "Lebanon", "Syria", "Iraq", "Afghanistan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "Tajikistan", "Turkmenistan", "Azerbaijan", "Armenia", "Georgia", "Mongolia", "Nepal", "Bhutan", "Lào", "Brunei", "Đông Timor"
 };
@@ -224,7 +518,7 @@ const char* color[200] = {
 const char* size[100] = {
     "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "15", "35", "35.5", "36", "36.5", "37", "37.5", "38", "38.5", "39", "39.5", "40", "40.5", "41", "41.5", "42", "42.5", "43", "43.5", "44", "44.5", "45", "45.5", "46", "46.5", "47", "47.5", "48", "48.5", "49", "50", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13", "22", "22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "28.5", "29", "29.5", "30", "1Y", "2Y", "3Y", "4Y", "5Y", "5C", "6C", "7C", "8C"
 };
-const char* description[20] = {
+const char* brand_description[20] = {
 "A global leader in athletic footwear, blending innovative technology with iconic designs for peak performance and style.", "Driven by a passion for sport, Adidas creates cutting-edge shoes that combine athletic prowess with trendsetting fashion.", "Known for its bold designs and athletic heritage, Puma offers stylish and performance-driven footwear for athletes and fashion enthusiasts alike.", "Focusing on comfort and quality craftsmanship, New Balance delivers reliable athletic and lifestyle shoes with a timeless appeal.", "An enduring classic, Converse provides versatile, iconic canvas sneakers that embody casual cool and individual expression.", "The authentic original for skate culture, Vans offers durable, stylish shoes with signature waffle outsoles, perfect for active lifestyles.", "Recognized for their rebellious spirit and unmistakable durability, Dr. Martens boots offer comfort, iconic style, and a rugged edge.", "Crafted for outdoor adventures and urban exploration, Timberland footwear combines rugged durability with timeless utility and style.", "Famous for luxurious comfort, Ugg boots and slippers provide unparalleled warmth and coziness, becoming a staple for relaxed style.", "Offering innovative comfort technologies, Skechers provides a wide range of stylish and comfortable shoes for every activity and age.", "Revolutionizing running with maximum cushioning, Hoka shoes deliver exceptional comfort and support for long distances and varied terrains.", "Synonymous with ergonomic comfort, Birkenstock sandals and clogs offer anatomically shaped footbeds for natural support and well-being.", "A symbol of Italian luxury, Gucci footwear showcases exquisite craftsmanship, bold designs, and iconic motifs for the discerning fashionista.", "Instantly recognizable by their signature red soles, Christian Louboutin heels epitomize high-fashion glamour, allure, and daring design.", "Pioneering sustainable footwear, Allbirds creates comfortable and minimalist shoes from natural, eco-friendly materials like wool and tree fiber."
 };
 const char* product_name[200]= {
@@ -242,7 +536,7 @@ const char* product_name[200]= {
 "Nexus Form", "Street-Craft", "Concrete Roamer", "District Runner", "The Monarch",
 "Heritage-Lite", "Structure-X", "City-Scape", "Urban-Flow", "Axis Low",
 "The Collective", "Pavement Glide", "Metro-Shift", "Urban-Core", "City-Drift",
-"The Classic '88", "Downtown-Arch", "Nexus-Knit", "Street-Form", "Concrete-Pulse",
+"The Classic 88", "Downtown-Arch", "Nexus-Knit", "Street-Form", "Concrete-Pulse",
 "District-Lo", "The Sovereign", "Heritage-Pro", "Structure-Knit", "City-Bound",
 "Urban-Vibe", "Axis-Pro", "The Assemble", "Pavement-Strider", "Metro-Trek",
 "Urban-Frame", "City-Walk", "The Founder", "Downtown-X", "Nexus-Arch",
@@ -259,7 +553,7 @@ const char* product_name[200]= {
 "Boulder-Trek", "River-Tread", "Path-Guard", "Geo-Ascent", "Crest-Hiker",
 "Terra-Roam", "Ridge-Grip", "Summit-Lite", "Geo-Tread", "Canyon-Roamer",
 "The Heritage One", "Classic Stride", "Legend Loafer", "Essential Form", "Pure Walker",
-"The Ace '78", "Sovereign Knit", "Legacy Court", "The Standard Lo", "Union-Walker",
+"The Ace 78", "Sovereign Knit", "Legacy Court", "The Standard Lo", "Union-Walker",
 "Parker Lo", "The Artisan", "Charter-Knit", "Estate-Runner", "The Original",
 "Heritage-Knit", "Classic-Form", "Legend-Pro", "Essential-Arch", "Pure-Stride",
 "The Ace-Hi", "Sovereign-Lo", "Legacy-Pro", "The Standard-Knit", "Union-Street",
@@ -307,7 +601,7 @@ const char* material[200] = {
 "Plant-Dyed Canvas", "Energy-Return Foam", "Structured Nylon", "Vegan-Wool", "Burnished Leather"
 };
 const char* description_product[200] = {
-    "Tái định nghĩa phong cách đường phố. Thiết kế tối giản kết hợp cùng vật liệu cao cấp mang lại vẻ ngoài hiện đại và tinh tế.",
+"Tái định nghĩa phong cách đường phố. Thiết kế tối giản kết hợp cùng vật liệu cao cấp mang lại vẻ ngoài hiện đại và tinh tế.",
 "Dành cho những vận động viên thực thụ. Công nghệ đế giữa hoàn trả năng lượng giúp bạn bứt phá trong từng sải chân.",
 "Vẻ đẹp vượt thời gian. Được chế tác thủ công từ da bê nguyên tấm, đôi giày này là biểu tượng của sự sang trọng và đẳng cấp.",
 "Người bạn đồng hành trên mọi nẻo đường. Đế ngoài Vibram siêu bám và lớp màng chống thấm giúp bạn chinh phục mọi địa hình.",
@@ -345,7 +639,7 @@ const char* description_product[200] = {
 "Sự êm ái đến từ lớp đệm gel ở gót chân, hấp thụ tối đa chấn động.",
 "Thiết kế cổ cao (high-top) giúp bảo vệ và hỗ trợ cổ chân hiệu quả.",
 "Vẻ ngoài bụi bặm, phong trần với chất liệu da sáp và các chi tiết bằng đồng.",
-"Thoải mái ngay từ lần xỏ chân đầu tiên, không cần thời gian 'break-in'.",
+"Thoải mái ngay từ lần xỏ chân đầu tiên, không cần thời gian break-in.",
 "Hãy để sự sáng tạo dẫn lối với phiên bản giày có thể tùy chỉnh màu sắc theo ý thích.",
 "Sự cân bằng hoàn hảo giữa hiệu năng và thẩm mỹ.",
 "Được thiết kế để chịu được sự khắc nghiệt của sân tập và sự hối hả của đường phố.",
@@ -510,18 +804,10 @@ char *gen_phone_number()
     // Biến static chỉ được khởi tạo một lần và tồn tại suốt chương trình.
     static char sdt_buffer[11]; // 10 cho số, 1 cho ký tự '\0'
 
-    // 1. Danh sách các đầu số di động hợp lệ của Việt Nam
-    const char *dau_so[] = {"090", "091", "098", "086", "077", "059", "035", "038"};
-    int so_luong_dau_so = sizeof(dau_so) / sizeof(dau_so[0]);
-
-    // 2. Chọn ngẫu nhiên một đầu số
-    const char *dau_so_duoc_chon = dau_so[rand() % so_luong_dau_so];
-
-    // 3. Sao chép đầu số đã chọn vào buffer
-    strcpy(sdt_buffer, dau_so_duoc_chon);
+    sdt_buffer[0] = '0';
 
     // 4. Tạo 7 chữ số còn lại (vì đầu số đã có 3 chữ số)
-    for (int i = 3; i < 10; i++)
+    for (int i = 1; i < 10; i++)
     {
         sdt_buffer[i] = (rand() % 10) + '0';
     }
@@ -538,11 +824,11 @@ char *gen_phone_number()
  */
 char *gen_username()
 {
-    static char user_buffer[11]; // Tối đa 10 ký tự + '\0'
+    static char user_buffer[21]; // Tối đa 10 ký tự + '\0'
     const char *charset = "abcdefghijklmnopqrstuvwxyz0123456789";
     int charset_len = strlen(charset);
 
-    int len = (rand() % 5) + 6; // Độ dài từ 6 đến 10
+    int len = (rand() % 15) + 6; // Độ dài từ 6 đến 20
     for (int i = 0; i < len; i++)
     {
         user_buffer[i] = charset[rand() % charset_len];
@@ -578,13 +864,13 @@ char *gen_password()
  */
 char *gen_email()
 {
-    static char email_buffer[31]; // Tối đa 30 ký tự + '\0'
+    static char email_buffer[41]; // Tối đa 30 ký tự + '\0'
     const char *charset = "abcdefghijklmnopqrstuvwxyz0123456789";
     const char *domain = "@gmail.com";
     int charset_len = strlen(charset);
 
-    // Tự tạo phần username riêng, không gọi hàm tao_username_static()
-    int username_len = (rand() % 5) + 6; // Độ dài từ 6 đến 10
+    // Tự tạo phần username riêng
+    int username_len = (rand() % 25) + 6; // Độ dài từ 6 đến 30
     for (int i = 0; i < username_len; i++)
     {
         email_buffer[i] = charset[rand() % charset_len];
@@ -595,26 +881,19 @@ char *gen_email()
 
     return email_buffer;
 }
-void gen_id(char *buffer) {
-    const char *charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const char *numset = "123456789";
-    buffer[0] = charset[rand() % 26];
-    buffer[1] = charset[rand() % 26];
-    for (int i = 2; i < 6; i++) {
-        buffer[i] = numset[rand() % 9];
-    }
-    buffer[6] = '\0';
+
+void gen_customer_id(int i) {
+    sprintf(customer_ids[i], "CUS%05d", i + 1);
 }
-void gen_product_id(char *buffer) {
-    const char *charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const char *numset = "123456789";
-    buffer[0] = charset[rand() % 26];
-    buffer[1] = charset[rand() % 26];
-    for (int i = 2; i < 8; i++) {
-        buffer[i] = numset[rand() % 9];
-    }
-    buffer[8] = '\0';
+
+void gen_product_id(int i) {
+    sprintf(product_ids[i], "PD%06d", i + 1);
 }
+
+void gen_variant_id(int i) {
+    sprintf(variant_ids[i], "V%07d", i + 1);
+}
+
 int main() {
     // 1. Khởi tạo hạt giống cho bộ tạo số ngẫu nhiên
     // Chỉ cần gọi srand() một lần duy nhất khi bắt đầu chương trình.
@@ -632,62 +911,61 @@ int main() {
         printf("Không thể mở file.\n");
         return 1; // Trả về mã lỗi
     }
-    char **category_ids = malloc(1000*sizeof(char*));
-    char **brand_ids = malloc(1000*sizeof(char*));
-    char **product_ids = malloc(1000*sizeof(char*));
-    char **variant_ids = malloc(1000*sizeof(char*)); 
-    if (category_ids == NULL || brand_ids == NULL || product_ids == NULL || variant_ids == NULL) {
-        printf("Lỗi: Không thể cấp phát bộ nhớ.\n");
-        free(category_ids);
-        free(brand_ids);
-        free(product_ids);
-        free(variant_ids);
-        return 1;
-    }
-    for (int i = 0; i < 100; i++) {
+
+    //set UTF8
+    fprintf(filePointer, "SET client_encoding TO 'UTF8';\n");
+
+    //insert bảng customer
+    fprintf(filePointer, "INSERT INTO customer(customer_id, first_name, last_name, address, city, district, phone_number, email, credit_card, dob, gender, username, password) VALUES\n");
+    for (int i = 0; i < 10000; i++) {
+        gen_customer_id(i);
         //cuối dòng là dấu ,
-        if(i != 99) fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n"/*dấu , cuối dòng*/, 
-            i + 1, first_name[random_int(0, 199)], last_name[random_int(0, 199)], 
+        if(i != 9999) fprintf(filePointer, "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n"/*dấu , cuối dòng*/, 
+            customer_ids[i], first_name[random_int(0, 199)], last_name[random_int(0, 199)], 
             address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)], 
             gen_phone_number(), gen_email(), credit_card[random_int(0, 199)], 
             dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
         
         //cuối dòng là dấu;
-        else fprintf(filePointer, "('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n"/*dấu ; cuối dòng*/, 
-            i + 1, first_name[random_int(0, 199)], last_name[random_int(0, 199)], 
+        else fprintf(filePointer, "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n\n"/*dấu ; cuối dòng*/, 
+            customer_ids[i], first_name[random_int(0, 199)], last_name[random_int(0, 199)], 
             address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)], 
             gen_phone_number(), gen_email(), credit_card[random_int(0, 199)], 
             dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
-        
     }
-    fprintf(filePointer, "insert into category(category_id, category_name) value\n");
-    for (int i=0; i<100; i++){
-        category_ids[i] = malloc(7);
-        gen_id(category_ids[i]);
-        if(i != 99) fprintf(filePointer, "('%s','%s'),\n", category_ids[i], category_name[random_int(0,199)]);
-        else fprintf(filePointer, "('%s','%s');\n", category_ids[i], category_name[random_int(0,199)]);
+
+    //insert bảng category
+    fprintf(filePointer, "INSERT INTO category(category_id, category_name) VALUES\n");
+    for (int i = 0; i < 50; i++){
+        if(i != 49) fprintf(filePointer, "('%s','%s'),\n", categories[i][0], categories[i][1]);
+        else fprintf(filePointer, "('%s','%s');\n\n", categories[i][0], categories[i][1]);
     }
-    fprintf(filePointer, "insert into brand(brand_id, brand_name, country_of_origin, description) value\n");
-    for (int i=0; i<100; i++){
-        brand_ids[i] = malloc(7);
-        gen_id(brand_ids[i]);
-        if(i != 99) fprintf(filePointer, "('%s','%s', '%s', '%s'),\n", brand_ids[i], brand_name[random_int(0,99)], country_of_origin[random_int(0,99)], description[random_int(0,14)]);
-        else fprintf(filePointer, "('%s','%s', '%s', '%s');\n", brand_ids[i], brand_name[random_int(0,99)], country_of_origin[random_int(0,99)], description[random_int(0,14)]);
+
+    //insert bảng brand
+    fprintf(filePointer, "INSERT INTO brand(brand_id, brand_name, country_of_origin, brand_description) VALUES\n");
+    for (int i = 0; i < 200; i++){
+        if(i != 199) fprintf(filePointer, "('%s','%s', '%s', '%s'),\n", brands[i][0], brands[i][1], country_of_origin[random_int(0,99)], brand_description[random_int(0,14)]);
+        else fprintf(filePointer, "('%s','%s', '%s', '%s');\n\n", brands[i][0], brands[i][1], country_of_origin[random_int(0,99)], brand_description[random_int(0,14)]);
     }
-    fprintf(filePointer, "insert into variant(variant_id, product_id, color, size, stock_quantity) value\n");
-    for (int i=0; i<100; i++){
-        variant_ids[i] = malloc(7);
-        product_ids[i] = malloc(9);
-        gen_id(variant_ids[i]);
-        gen_product_id(product_ids[i]);
-        if(i != 99) fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[i], color[random_int(0,99)], size[random_int(0,50)], random_int(0,1000));
-        else fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[i], color[random_int(0,99)], size[random_int(0,50)], random_int(0,1000));
+
+    //insert bảng product
+    fprintf(filePointer, "INSERT INTO product(product_id, category_id, brand_id, product_name, purchase_price, selling_price, material, product_description) VALUES\n");
+    for (int i = 0; i < 1000000; i++){
+        gen_product_id(i);
+        double selling_price = random_double(10,5000);
+        double purchase_price = random_double(10, selling_price);
+        if(i != 999999) fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s'),\n", product_ids[i], categories[random_int(0,49)][0], brands[random_int(0,199)][0], product_name[random_int(0,99)], purchase_price, selling_price, material[random_int(0,99)], description_product[random_int(0,99)]);
+        else fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s');\n\n", product_ids[i], categories[random_int(0,49)][0], brands[random_int(0,199)][0], product_name[random_int(0,99)], purchase_price, selling_price, material[random_int(0,99)], description_product[random_int(0,99)]);
     }
-    fprintf(filePointer, "insert into product(product_id, category_id, brand_id, product_name, purchase_price, selling_price, material, description, average_rating) value\n");
-    for (int i=0; i<100; i++){
-        if(i != 99) fprintf(filePointer, "('%s','%s','%s','%s','%.1lf', '%s', '%s', '%.1lf'),\n", product_ids[random_int(0,99)], category_ids[random_int(0,99)], brand_ids[random_int(0,99)], product_name[random_int(0,99)], random_double(10,500), material[random_int(0,99)], description[random_int(0,99)], random_double(0,5));
-        else fprintf(filePointer, "('%s','%s','%s','%s','%.1lf', '%s', '%s', '%.1lf');\n", product_ids[random_int(0,99)], category_ids[random_int(0,99)], brand_ids[random_int(0,99)], product_name[random_int(0,99)], random_double(10,500), material[random_int(0,99)], description_product[random_int(0,99)], random_double(0,5));
+
+    //insert bảng variant
+    fprintf(filePointer, "INSERT INTO variant(variant_id, product_id, color, size, stock_quantity) VALUES\n");
+    for (int i = 0; i < 10000000; i++){
+        gen_variant_id(i);
+        if(i != 9999999) fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0,99)], size[random_int(0,50)], random_int(0,10000));
+        else fprintf(filePointer, "('%s','%s', '%s', '%s', '%d');\n\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0,99)], size[random_int(0,50)], random_int(0,10000));
     }
+
     // Đóng file sau khi hoàn thành việc ghi.
     // Điều này rất quan trọng để đảm bảo tất cả dữ liệu được lưu vào file và giải phóng tài nguyên.
     fclose(filePointer);
