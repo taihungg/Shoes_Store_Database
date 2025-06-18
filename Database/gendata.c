@@ -812,11 +812,11 @@ const char *feedback_content[20] = {
 
 // Mảng cho trạng thái đơn hàng
 const char *order_status[5] = {
-    "Pending",
-    "Processing",
-    "Shipped",
-    "Delivered",
-    "Cancelled"};
+    "PENDING",
+    "PROCESSING",
+    "SHIPPED",
+    "DELIVERED",
+    "CANCELLED"};
 
 // Mảng cho phương thức thanh toán
 const char *payment_methods[5] = {
@@ -826,11 +826,6 @@ const char *payment_methods[5] = {
     "E-wallet",
     "PayPal"};
 
-// Mảng cho trạng thái thanh toán
-const char *payment_status[3] = {
-    "Pending",
-    "Completed",
-    "Failed"};
 /**
  * @brief Tạo và trả về một SĐT ngẫu nhiên có đầu số Việt Nam.
  * Hàm này sử dụng một bộ đệm tĩnh (static).
@@ -1011,36 +1006,12 @@ int main()
 
     // insert bảng brand
     fprintf(filePointer, "INSERT INTO brand(brand_id, brand_name, country_of_origin, brand_description) VALUES\n");
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 200; i++)
     {
-        if (i != 19)
+        if (i != 199)
             fprintf(filePointer, "('%s','%s', '%s', '%s'),\n", brands[i][0], brands[i][1], country_of_origin[random_int(0, 99)], brand_description[random_int(0, 14)]);
         else
             fprintf(filePointer, "('%s','%s', '%s', '%s');\n\n", brands[i][0], brands[i][1], country_of_origin[random_int(0, 99)], brand_description[random_int(0, 14)]);
-    }
-
-    // insert bảng product
-    fprintf(filePointer, "INSERT INTO product(product_id, category_id, brand_id, product_name, purchase_price, selling_price, material, product_description) VALUES\n");
-    for (int i = 0; i < 100; i++)
-    {
-        gen_product_id(i);
-        double selling_price = random_double(10, 5000);
-        double purchase_price = random_double(10, selling_price);
-        if (i != 99)
-            fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s'),\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
-        else
-            fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s');\n\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
-    }
-
-    // insert bảng variant
-    fprintf(filePointer, "INSERT INTO variant(variant_id, product_id, color, size, stock_quantity) VALUES\n");
-    for (int i = 0; i < 100; i++)
-    {
-        gen_variant_id(i);
-        if (i != 99)
-            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0, 99)], size[random_int(0, 50)], random_int(0, 10000));
-        else
-            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d');\n\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0, 99)], size[random_int(0, 50)], random_int(0, 10000));
     }
 
     // Insert bảng employee
@@ -1070,8 +1041,43 @@ int main()
                     gen_password());
     }
 
+    // insert bảng product
+    fprintf(filePointer, "INSERT INTO product(product_id, category_id, brand_id, product_name, purchase_price, selling_price, material, product_description) VALUES\n");
+    for (int i = 0; i < 100; i++)
+    {
+        gen_product_id(i);
+        double selling_price = random_double(10, 5000);
+        double purchase_price = random_double(10, selling_price);
+        if (i != 99)
+            fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s'),\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
+        else
+            fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s');\n\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
+    }
+
+    // insert bảng variant
+    fprintf(filePointer, "INSERT INTO variant(variant_id, product_id, color, size, stock_quantity) VALUES\n");
+    for (int i = 0; i < 100; i++)
+    {
+        gen_variant_id(i);
+        // Sửa thành lấy product_id từ mảng product_ids đã tạo
+        if (i != 99)
+            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n",
+                    variant_ids[i],
+                    product_ids[random_int(0, 99)], // Thêm product_id ngẫu nhiên từ 0-99
+                    color[random_int(0, 99)],
+                    size[random_int(0, 50)],
+                    random_int(0, 100));
+        else
+            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d');\n\n",
+                    variant_ids[i],
+                    product_ids[random_int(0, 99)], // Thêm product_id ngẫu nhiên từ 0-99
+                    color[random_int(0, 99)],
+                    size[random_int(0, 50)],
+                    random_int(0, 100));
+    }
+
     // Insert bảng order
-    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, employee_id, total_amount, total_discount, final_amount, order_date, status, payment_method, payment_status, note) VALUES\n");
+    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, employee_id, total_amount, total_discount, final_amount, order_date, status, payment_method, note) VALUES\n");
     for (int i = 0; i < 100; i++)
     {
         gen_order_id(i);
@@ -1080,7 +1086,7 @@ int main()
         double final_amount = total_amount - total_discount;
 
         if (i != 99)
-            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', '%s', 'Order #%d'),\n",
+            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d'),\n",
                     order_ids[i],
                     customer_ids[random_int(0, 99)],
                     employee_ids[random_int(0, 49)],
@@ -1091,10 +1097,9 @@ int main()
                     random_int(1, 28),
                     order_status[random_int(0, 4)],
                     payment_methods[random_int(0, 4)],
-                    payment_status[random_int(0, 2)],
                     i + 1);
         else
-            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', '%s', 'Order #%d');\n\n",
+            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d');\n\n",
                     order_ids[i],
                     customer_ids[random_int(0, 99)],
                     employee_ids[random_int(0, 49)],
@@ -1105,35 +1110,34 @@ int main()
                     random_int(1, 28),
                     order_status[random_int(0, 4)],
                     payment_methods[random_int(0, 4)],
-                    payment_status[random_int(0, 2)],
                     i + 1);
     }
 
     // Insert bảng orderdetail
-    fprintf(filePointer, "INSERT INTO orderdetail(orderdetail_id, order_id, variant_id, quantity, unit_price, discount, sub_total) VALUES\n");
-    for (int i = 0; i < 200; i++)
+    fprintf(filePointer, "INSERT INTO orderdetail(orderdetail_id, order_id, variant_id, order_quantity, unit_price, discount, sub_total) VALUES\n");
+    for (int i = 0; i < 100; i++)
     {
         gen_orderdetail_id(i);
-        int quantity = random_int(1, 5);
+        int order_quantity = random_int(1, 5);
         double unit_price = random_double(50, 500);
         double discount = random_double(0, unit_price * 0.2);
-        double sub_total = quantity * (unit_price - discount);
+        double sub_total = order_quantity * (unit_price - discount);
 
-        if (i != 199)
+        if (i != 99)
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f'),\n",
                     orderdetail_ids[i],
-                    order_ids[random_int(0, 99)],
-                    variant_ids[random_int(0, 99)],
-                    quantity,
+                    order_ids[i],
+                    variant_ids[i],
+                    order_quantity,
                     unit_price,
                     discount,
                     sub_total);
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f');\n\n",
                     orderdetail_ids[i],
-                    order_ids[random_int(0, 99)],
-                    variant_ids[random_int(0, 99)],
-                    quantity,
+                    order_ids[i],
+                    variant_ids[i],
+                    order_quantity,
                     unit_price,
                     discount,
                     sub_total);
@@ -1141,13 +1145,13 @@ int main()
 
     // Insert bảng feedback
     fprintf(filePointer, "INSERT INTO feedback(feedback_id, orderdetail_id, feedback, rating, feedback_date) VALUES\n");
-    for (int i = 0; i < 150; i++)
+    for (int i = 0; i < 100; i++)
     {
         gen_feedback_id(i);
-        if (i != 149)
+        if (i != 99)
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '2023-%02d-%02d'),\n",
                     feedback_ids[i],
-                    orderdetail_ids[random_int(0, 199)],
+                    orderdetail_ids[i],
                     feedback_content[random_int(0, 19)],
                     random_int(1, 5),
                     random_int(1, 12),
@@ -1155,7 +1159,7 @@ int main()
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '2023-%02d-%02d');\n\n",
                     feedback_ids[i],
-                    orderdetail_ids[random_int(0, 199)],
+                    orderdetail_ids[i],
                     feedback_content[random_int(0, 19)],
                     random_int(1, 5),
                     random_int(1, 12),
