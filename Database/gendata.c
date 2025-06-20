@@ -2,14 +2,13 @@
 #include <stdlib.h> // Cho rand() và srand()
 #include <time.h>   // Cho time()
 #include <string.h> // Cần thiết cho hàm strcpy
-#define BIG_NUMBER 500000
-#define SMALL_NUMBER 20000
-#define PART_BIG_NUMBER 63333
+#define BIG_NUMBER 100000
+#define SMALL_NUMBER 10000
+#define PART_BIG_NUMBER 33333
 
 char customer_ids[1000][9];
 char product_ids[SMALL_NUMBER][9];
 char variant_ids[BIG_NUMBER][9];
-char feedback_ids[PART_BIG_NUMBER][9];
 char order_ids[SMALL_NUMBER][9];
 char orderdetail_ids[BIG_NUMBER][9];
 char employee_ids[50][9];
@@ -120,7 +119,7 @@ const char *district[200] = {
     "Condesa", "Zona Hotelera", "Chapultepec", "Zona Rio", "San Pedro Garza García", "Ipanema", "Vila Madalena", "Pelourinho", "Asa Sul", "Praia de Iracema",
     "Recoleta", "Plaza Independencia", "Nueva Córdoba", "Fisherton", "Lastarria", "Cerro Alegre", "Miraflores", "San Blas", "La Candelaria", "El Poblado"};
 
-const char *address[200] = {
+const char *street[200] = {
     "12 Điện Biên Phủ", "21 Nguyễn Trãi", "34 Bạch Đằng", "56 Lạch Tray", "78 Hòa Bình", "90 Trần Phú",
     "11 Lý Thường Kiệt", "22 Đồng Khởi", "33 Thùy Vân", "44 Lê Lợi", "55 Trần Hưng Đạo", "66 Phan Đình Phùng",
     "77 Mạc Cửu", "88 Lê Hoàn", "99 Quang Trung", "10 Nguyễn Gia Thiều", "123 Xuân Thủy", "234 Nam Kỳ Khởi Nghĩa",
@@ -933,11 +932,6 @@ void gen_variant_id(int i)
     sprintf(variant_ids[i], "V%07d", i + 1);
 }
 
-void gen_feedback_id(int i)
-{
-    sprintf(feedback_ids[i], "FB%06d", i + 1);
-}
-
 void gen_order_id(int i)
 {
     sprintf(order_ids[i], "ORD%05d", i + 1);
@@ -992,7 +986,7 @@ int main()
     fprintf(filePointer, "SET client_encoding TO 'UTF8';\n\n");
 
     // insert bảng customer
-    fprintf(filePointer, "INSERT INTO customer(customer_id, first_name, last_name, address, city, district, phone_number, email, credit_card, dob, gender, username, password) VALUES\n");
+    fprintf(filePointer, "INSERT INTO customer(customer_id, first_name, last_name, street, city, district, phone_number, email, credit_card, dob, gender, username, password) VALUES\n");
     for (int i = 0; i < 1000; i++)
     {
         gen_customer_id(i);
@@ -1000,7 +994,7 @@ int main()
         if (i != 999)
             fprintf(filePointer, "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n" /*dấu , cuối dòng*/,
                     customer_ids[i], first_name[random_int(0, 199)], last_name[random_int(0, 199)],
-                    address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
+                    street[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
                     gen_phone_number(), gen_email(), credit_card[random_int(0, 199)],
                     dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
 
@@ -1008,7 +1002,7 @@ int main()
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n\n" /*dấu ; cuối dòng*/,
                     customer_ids[i], first_name[random_int(0, 199)], last_name[random_int(0, 199)],
-                    address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
+                    street[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
                     gen_phone_number(), gen_email(), credit_card[random_int(0, 199)],
                     dob[random_int(0, 199)], gender[random_int(0, 1)], gen_username(), gen_password());
     }
@@ -1085,7 +1079,7 @@ int main()
     }
 
     // Insert bảng order
-    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, employee_id, total_amount, total_discount, final_amount, order_date, status, payment_method, note) VALUES\n");
+    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, total_amount, total_discount, final_amount, order_date, status, payment_method, note) VALUES\n");
     for (int i = 0; i < SMALL_NUMBER; i++)
     {
         gen_order_id(i);
@@ -1094,10 +1088,9 @@ int main()
         double final_amount = total_amount - total_discount;
 
         if (i != SMALL_NUMBER - 1)
-            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d'),\n",
+            fprintf(filePointer, "('%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d'),\n",
                     order_ids[i],
-                    customer_ids[random_int(0, 99)],
-                    employee_ids[random_int(0, 49)],
+                    customer_ids[random_int(0, 999)],
                     total_amount,
                     total_discount,
                     final_amount,
@@ -1109,8 +1102,7 @@ int main()
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d');\n\n",
                     order_ids[i],
-                    customer_ids[random_int(0, 99)],
-                    employee_ids[random_int(0, 49)],
+                    customer_ids[random_int(0, 999)],
                     total_amount,
                     total_discount,
                     final_amount,
@@ -1134,8 +1126,8 @@ int main()
         if (i != BIG_NUMBER - 1)
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f'),\n",
                     orderdetail_ids[i],
-                    order_ids[random_int(0, 99)],
-                    variant_ids[random_int(0, 99)],
+                    order_ids[random_int(0, SMALL_NUMBER - 1)],
+                    variant_ids[random_int(0, BIG_NUMBER - 1)],
                     quantity,
                     unit_price,
                     discount,
@@ -1143,8 +1135,8 @@ int main()
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f');\n\n",
                     orderdetail_ids[i],
-                    order_ids[random_int(0, 99)],
-                    variant_ids[random_int(0, 99)],
+                    order_ids[random_int(0, SMALL_NUMBER - 1)],
+                    variant_ids[random_int(0, BIG_NUMBER - 1)],
                     quantity,
                     unit_price,
                     discount,
@@ -1162,21 +1154,18 @@ int main()
     // 2. Xáo trộn mảng
     shuffle(numbers, BIG_NUMBER);
 
-    fprintf(filePointer, "INSERT INTO feedback(feedback_id, orderdetail_id, feedback, rating, feedback_date) VALUES\n");
+    fprintf(filePointer, "INSERT INTO feedback(orderdetail_id, feedback, rating, feedback_date) VALUES\n");
     for (int i = 0; i < PART_BIG_NUMBER; i++)
     {
-        gen_feedback_id(i);
         if (i != PART_BIG_NUMBER - 1)
-            fprintf(filePointer, "('%s', '%s', '%s', '%d', '2023-%02d-%02d'),\n",
-                    feedback_ids[i],
+            fprintf(filePointer, "('%s', '%s', '%d', '2023-%02d-%02d'),\n",
                     orderdetail_ids[numbers[i]],
                     feedback_content[random_int(0, 19)],
                     random_int(1, 5),
                     random_int(1, 12),
                     random_int(1, 28));
         else
-            fprintf(filePointer, "('%s', '%s', '%s', '%d', '2023-%02d-%02d');\n\n",
-                    feedback_ids[i],
+            fprintf(filePointer, "('%s', '%s', '%d', '2023-%02d-%02d');\n\n",
                     orderdetail_ids[numbers[i]],
                     feedback_content[random_int(0, 19)],
                     random_int(1, 5),
