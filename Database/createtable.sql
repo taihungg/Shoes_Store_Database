@@ -44,12 +44,13 @@ CREATE TABLE variant (
 	variant_id CHAR(8) PRIMARY KEY,
 	product_id CHAR(8) NOT NULL,
 	color VARCHAR(20) NOT NULL,
-	size DECIMAL(3,1) NOT NULL,
+	size VARCHAR(5) NOT NULL,
 	stock_quantity INTEGER NOT NULL,
 	CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
 CREATE TABLE employee (
+	employee_id CHAR(8) PRIMARY KEY,
 	employee_id CHAR(8) PRIMARY KEY,
 	first_name VARCHAR(20),
 	last_name VARCHAR(20),
@@ -60,15 +61,15 @@ CREATE TABLE employee (
 	password VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE "order" (
+CREATE TABLE order (
 	order_id CHAR(8) PRIMARY KEY,
 	employee_id CHAR(8),
 	total_amount DECIMAL(10,2) DEFAULT 0.0,
 	total_discount DECIMAL(10,2) DEFAULT 0.0,
 	final_amount DECIMAL(10,2) DEFAULT 0.0,
 	order_date DATE,
-	status VARCHAR(20) CHECK (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
-	payment_method VARCHAR(20) CHECK (payment_method IN ('CASH', 'CREDIT CARD', 'VISA CARD', 'E-WALLET', 'BANK TRANSFER')) DEFAULT 'CASH',
+	status VARCHAR(20) CHECK (status IN ('PROCESSING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED')) DEFAULT 'PROCESSING',
+	payment_method VARCHAR(20),
 	note TEXT,
 	CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
@@ -92,6 +93,32 @@ CREATE TABLE feedback (
 	feedback_date DATE,
 	CONSTRAINT fk_orderdetail_id FOREIGN KEY (orderdetail_id) REFERENCES orderdetail(orderdetail_id)
 );
+CREATE OR REPLACE FUNCTION update_order_totals()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_order_id CHAR(8);
+BEGIN
+    v_order_id := NEW.order_id; -- Lấy order_id từ bản ghi mới được chèn
+
+    -- Cập nhật tổng số tiền, tổng giảm giá, và tổng số tiền cuối cùng của đơn hàng
+    UPDATE "order"
+    SET
+        total_amount = (SELECT SUM(od.order_quantity * od.unit_price) FROM orderdetail od WHERE od.order_id = v_order_id),
+        total_discount = (SELECT SUM(od.order_quantity * od.discount) FROM orderdetail od WHERE od.order_id = v_order_id),
+        final_amount = (SELECT SUM(od.sub_total) FROM orderdetail od WHERE od.order_id = v_order_id)
+    WHERE
+        order_id = v_order_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER after_orderdetail_insert
+AFTER INSERT ON orderdetail
+FOR EACH ROW
+EXECUTE FUNCTION update_order_totals();
+
+
 
 CREATE OR REPLACE FUNCTION update_order_totals()
 RETURNS TRIGGER AS $$
