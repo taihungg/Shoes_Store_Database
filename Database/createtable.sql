@@ -50,7 +50,7 @@ CREATE TABLE variant (
 );
 
 CREATE TABLE employee (
-	employee_id CHAR(6) PRIMARY KEY,
+	employee_id CHAR(8) PRIMARY KEY,
 	first_name VARCHAR(20),
 	last_name VARCHAR(20),
 	dob DATE,
@@ -63,13 +63,13 @@ CREATE TABLE employee (
 CREATE TABLE "order" (
 	order_id CHAR(8) PRIMARY KEY,
 	customer_id CHAR(8) NOT NULL,
-	employee_id CHAR(6),
+	employee_id CHAR(8),
 	total_amount DECIMAL(10,2) DEFAULT 0.0,
 	total_discount DECIMAL(10,2) DEFAULT 0.0,
 	final_amount DECIMAL(10,2) DEFAULT 0.0,
 	order_date DATE,
-	status VARCHAR(20) CHECK (status IN ('PROCESSING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED')) DEFAULT 'PROCESSING',
-	payment_method VARCHAR(20),
+	status VARCHAR(20) CHECK (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
+	payment_method VARCHAR(20) CHECK (payment_method IN ('CASH', 'CREDIT CARD', 'VISA CARD', 'E-WALLET', 'BANK TRANSFER')) DEFAULT 'CASH',
 	note TEXT,
 	CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
 	CONSTRAINT fk_employee_id FOREIGN KEY (employee_id) REFERENCES employee(employee_id)

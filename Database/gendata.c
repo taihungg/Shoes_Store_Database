@@ -2,14 +2,17 @@
 #include <stdlib.h> // Cho rand() và srand()
 #include <time.h>   // Cho time()
 #include <string.h> // Cần thiết cho hàm strcpy
+#define BIG_NUMBER 500000
+#define SMALL_NUMBER 20000
+#define PART_BIG_NUMBER 63333
 
-char customer_ids[99999][9];
-char product_ids[999999][9];
-char variant_ids[9999999][9];
-char feedback_ids[99999][9];
-char order_ids[99999][9];
-char orderdetail_ids[99999][9];
-char employee_ids[99999][9];
+char customer_ids[1000][9];
+char product_ids[SMALL_NUMBER][9];
+char variant_ids[BIG_NUMBER][9];
+char feedback_ids[PART_BIG_NUMBER][9];
+char order_ids[SMALL_NUMBER][9];
+char orderdetail_ids[BIG_NUMBER][9];
+char employee_ids[50][9];
 
 // Ham tao so ngau nhien trong mot khoang
 int random_int(int min, int max)
@@ -812,25 +815,20 @@ const char *feedback_content[20] = {
 
 // Mảng cho trạng thái đơn hàng
 const char *order_status[5] = {
-    "Pending",
-    "Processing",
-    "Shipped",
-    "Delivered",
-    "Cancelled"};
+    "PENDING",
+    "PACKAGING",
+    "ON DELIVERY",
+    "DELIVERED",
+    "CANCELLED"};
 
 // Mảng cho phương thức thanh toán
 const char *payment_methods[5] = {
-    "Cash",
-    "Credit Card",
-    "Bank Transfer",
-    "E-wallet",
-    "PayPal"};
+    "CASH",
+    "CREDIT CARD",
+    "VISA CARD",
+    "E-WALLET",
+    "BANK TRANSFER"};
 
-// Mảng cho trạng thái thanh toán
-const char *payment_status[3] = {
-    "Pending",
-    "Completed",
-    "Failed"};
 /**
  * @brief Tạo và trả về một SĐT ngẫu nhiên có đầu số Việt Nam.
  * Hàm này sử dụng một bộ đệm tĩnh (static).
@@ -955,6 +953,22 @@ void gen_employee_id(int i)
     sprintf(employee_ids[i], "EMP%05d", i + 1);
 }
 
+/**
+ * @brief Xáo trộn một mảng số nguyên bằng thuật toán Fisher-Yates.
+ * @param array Con trỏ tới mảng cần xáo trộn.
+ * @param n     Số lượng phần tử trong mảng.
+ */
+void shuffle(int *array, int n) {
+    if (n > 1) {
+        for (int i = n - 1; i > 0; i--) {
+            int j = rand() % (i + 1);
+            int temp = array[j];
+            array[j] = array[i];
+            array[i] = temp;
+        }
+    }
+}
+
 int main()
 {
     // 1. Khởi tạo hạt giống cho bộ tạo số ngẫu nhiên
@@ -975,15 +989,15 @@ int main()
     }
 
     // set UTF8
-    fprintf(filePointer, "SET client_encoding TO 'UTF8';\n");
+    fprintf(filePointer, "SET client_encoding TO 'UTF8';\n\n");
 
     // insert bảng customer
     fprintf(filePointer, "INSERT INTO customer(customer_id, first_name, last_name, address, city, district, phone_number, email, credit_card, dob, gender, username, password) VALUES\n");
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1000; i++)
     {
         gen_customer_id(i);
         // cuối dòng là dấu ,
-        if (i != 99)
+        if (i != 999)
             fprintf(filePointer, "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n" /*dấu , cuối dòng*/,
                     customer_ids[i], first_name[random_int(0, 199)], last_name[random_int(0, 199)],
                     address[random_int(0, 199)], city[random_int(0, 199)], district[random_int(0, 199)],
@@ -1011,9 +1025,9 @@ int main()
 
     // insert bảng brand
     fprintf(filePointer, "INSERT INTO brand(brand_id, brand_name, country_of_origin, brand_description) VALUES\n");
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 200; i++)
     {
-        if (i != 19)
+        if (i != 199)
             fprintf(filePointer, "('%s','%s', '%s', '%s'),\n", brands[i][0], brands[i][1], country_of_origin[random_int(0, 99)], brand_description[random_int(0, 14)]);
         else
             fprintf(filePointer, "('%s','%s', '%s', '%s');\n\n", brands[i][0], brands[i][1], country_of_origin[random_int(0, 99)], brand_description[random_int(0, 14)]);
@@ -1021,12 +1035,12 @@ int main()
 
     // insert bảng product
     fprintf(filePointer, "INSERT INTO product(product_id, category_id, brand_id, product_name, purchase_price, selling_price, material, product_description) VALUES\n");
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < SMALL_NUMBER; i++)
     {
         gen_product_id(i);
         double selling_price = random_double(10, 5000);
         double purchase_price = random_double(10, selling_price);
-        if (i != 99)
+        if (i != SMALL_NUMBER - 1)
             fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s'),\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s');\n\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
@@ -1034,15 +1048,15 @@ int main()
 
     // insert bảng variant
     fprintf(filePointer, "INSERT INTO variant(variant_id, product_id, color, size, stock_quantity) VALUES\n");
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < BIG_NUMBER; i++)
     {
         gen_variant_id(i);
-        if (i != 99)
+        if (i != BIG_NUMBER - 1)
             fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0, 99)], size[random_int(0, 50)], random_int(0, 10000));
         else
             fprintf(filePointer, "('%s','%s', '%s', '%s', '%d');\n\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0, 99)], size[random_int(0, 50)], random_int(0, 10000));
     }
-
+    
     // Insert bảng employee
     fprintf(filePointer, "INSERT INTO employee(employee_id, first_name, last_name, dob, phone_number, email, username, password) VALUES\n");
     for (int i = 0; i < 50; i++)
@@ -1071,16 +1085,16 @@ int main()
     }
 
     // Insert bảng order
-    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, employee_id, total_amount, total_discount, final_amount, order_date, status, payment_method, payment_status, note) VALUES\n");
-    for (int i = 0; i < 100; i++)
+    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, employee_id, total_amount, total_discount, final_amount, order_date, status, payment_method, note) VALUES\n");
+    for (int i = 0; i < SMALL_NUMBER; i++)
     {
         gen_order_id(i);
         double total_amount = random_double(100, 10000);
         double total_discount = random_double(0, total_amount * 0.3);
         double final_amount = total_amount - total_discount;
 
-        if (i != 99)
-            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', '%s', 'Order #%d'),\n",
+        if (i != SMALL_NUMBER - 1)
+            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d'),\n",
                     order_ids[i],
                     customer_ids[random_int(0, 99)],
                     employee_ids[random_int(0, 49)],
@@ -1091,10 +1105,9 @@ int main()
                     random_int(1, 28),
                     order_status[random_int(0, 4)],
                     payment_methods[random_int(0, 4)],
-                    payment_status[random_int(0, 2)],
                     i + 1);
         else
-            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', '%s', 'Order #%d');\n\n",
+            fprintf(filePointer, "('%s', '%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d');\n\n",
                     order_ids[i],
                     customer_ids[random_int(0, 99)],
                     employee_ids[random_int(0, 49)],
@@ -1105,13 +1118,12 @@ int main()
                     random_int(1, 28),
                     order_status[random_int(0, 4)],
                     payment_methods[random_int(0, 4)],
-                    payment_status[random_int(0, 2)],
                     i + 1);
     }
 
     // Insert bảng orderdetail
-    fprintf(filePointer, "INSERT INTO orderdetail(orderdetail_id, order_id, variant_id, quantity, unit_price, discount, sub_total) VALUES\n");
-    for (int i = 0; i < 200; i++)
+    fprintf(filePointer, "INSERT INTO orderdetail(orderdetail_id, order_id, variant_id, order_quantity, unit_price, discount, sub_total) VALUES\n");
+    for (int i = 0; i < BIG_NUMBER; i++)
     {
         gen_orderdetail_id(i);
         int quantity = random_int(1, 5);
@@ -1119,7 +1131,7 @@ int main()
         double discount = random_double(0, unit_price * 0.2);
         double sub_total = quantity * (unit_price - discount);
 
-        if (i != 199)
+        if (i != BIG_NUMBER - 1)
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f'),\n",
                     orderdetail_ids[i],
                     order_ids[random_int(0, 99)],
@@ -1140,14 +1152,24 @@ int main()
     }
 
     // Insert bảng feedback
+    int numbers[BIG_NUMBER];
+
+    // 1. Tạo mảng chứa tất cả các số từ 0 đến BIG_NUMBER - 1
+    for (int i = 0; i < BIG_NUMBER; i++) {
+        numbers[i] = i;
+    }
+
+    // 2. Xáo trộn mảng
+    shuffle(numbers, BIG_NUMBER);
+
     fprintf(filePointer, "INSERT INTO feedback(feedback_id, orderdetail_id, feedback, rating, feedback_date) VALUES\n");
-    for (int i = 0; i < 150; i++)
+    for (int i = 0; i < PART_BIG_NUMBER; i++)
     {
         gen_feedback_id(i);
-        if (i != 149)
+        if (i != PART_BIG_NUMBER - 1)
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '2023-%02d-%02d'),\n",
                     feedback_ids[i],
-                    orderdetail_ids[random_int(0, 199)],
+                    orderdetail_ids[numbers[i]],
                     feedback_content[random_int(0, 19)],
                     random_int(1, 5),
                     random_int(1, 12),
@@ -1155,7 +1177,7 @@ int main()
         else
             fprintf(filePointer, "('%s', '%s', '%s', '%d', '2023-%02d-%02d');\n\n",
                     feedback_ids[i],
-                    orderdetail_ids[random_int(0, 199)],
+                    orderdetail_ids[numbers[i]],
                     feedback_content[random_int(0, 19)],
                     random_int(1, 5),
                     random_int(1, 12),
