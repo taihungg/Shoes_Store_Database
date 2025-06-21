@@ -62,7 +62,7 @@ CREATE TABLE employee (
 
 CREATE TABLE "order" (
 	order_id CHAR(8) PRIMARY KEY,
-	employee_id CHAR(8),
+	customer_id CHAR(8),
 	total_amount DECIMAL(10,2) DEFAULT 0.0,
 	total_discount DECIMAL(10,2) DEFAULT 0.0,
 	final_amount DECIMAL(10,2) DEFAULT 0.0,
@@ -92,33 +92,6 @@ CREATE TABLE feedback (
 	feedback_date DATE,
 	CONSTRAINT fk_orderdetail_id FOREIGN KEY (orderdetail_id) REFERENCES orderdetail(orderdetail_id)
 );
-CREATE OR REPLACE FUNCTION update_order_totals()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_order_id CHAR(8);
-BEGIN
-    v_order_id := NEW.order_id; -- Lấy order_id từ bản ghi mới được chèn
-
-    -- Cập nhật tổng số tiền, tổng giảm giá, và tổng số tiền cuối cùng của đơn hàng
-    UPDATE "order"
-    SET
-        total_amount = (SELECT SUM(od.order_quantity * od.unit_price) FROM orderdetail od WHERE od.order_id = v_order_id),
-        total_discount = (SELECT SUM(od.order_quantity * od.discount) FROM orderdetail od WHERE od.order_id = v_order_id),
-        final_amount = (SELECT SUM(od.sub_total) FROM orderdetail od WHERE od.order_id = v_order_id)
-    WHERE
-        order_id = v_order_id;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER after_orderdetail_insert
-AFTER INSERT ON orderdetail
-FOR EACH ROW
-EXECUTE FUNCTION update_order_totals();
-
-
-
 CREATE OR REPLACE FUNCTION update_order_totals()
 RETURNS TRIGGER AS $$
 DECLARE
