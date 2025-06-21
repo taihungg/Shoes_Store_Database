@@ -51,7 +51,6 @@ CREATE TABLE variant (
 
 CREATE TABLE employee (
 	employee_id CHAR(8) PRIMARY KEY,
-	employee_id CHAR(8) PRIMARY KEY,
 	first_name VARCHAR(20),
 	last_name VARCHAR(20),
 	dob DATE,
@@ -61,7 +60,7 @@ CREATE TABLE employee (
 	password VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE order (
+CREATE TABLE "order" (
 	order_id CHAR(8) PRIMARY KEY,
 	employee_id CHAR(8),
 	total_amount DECIMAL(10,2) DEFAULT 0.0,
