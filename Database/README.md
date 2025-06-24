@@ -5,35 +5,7 @@ Import shoestore database in PostgreSQL:
 
 To import a database, the following methods can be used:
 
---- METHOD 1: using client tool applications ----
-=================================================
-
-0. Open terminal, move to the bin directory in the PostgreSQL Installation Directory
-
-1. create an admin user for shoestore database
-
-	./createuser -h localhost -p 5432 -U postgres -P admin_shoestore
-
-2. drop shoestore database if it exists
-
-	./dropdb -h localhost -p 5432 -U postgres shoestore 
-
-3. create a database named shoestore, its ownwer is admin_shoestore
-
-	./createdb -h localhost -p 5432 -U postgres -O admin_shoestore  shoestore
-
-4. Connect to the database shoestore on the server (localhost) using admin_shoestore account
-
-	./psql -h localhost -p 5432 -f <pathfile to dellstore2-normal-1.0.sql> shoestore admin_shoestore 
-
-	Vi du:
-	./psql -h localhost -p 5432 -f ~/shoestore.sql shoestore admin_shoestore  
-
-
-5. Connect to the database "shoestore" and see the database content
-
-
---- METHOD 2: executing commands in psql ----
+--- METHOD 1: executing commands in psql ----
 =================================================
 
 0. Connect to the server via psql using superuser postgres
@@ -58,8 +30,26 @@ To import a database, the following methods can be used:
 
 		\c shoestore admin_shoestore 
 
-	1.5 Execute all commands in the "shoestore.sql" file:
+	1.5 Execute all commands in the "createtable.sql" file:
+		\i <pathfile to createtable.sql> 
+		(E.g. \i C:/Users/admin/Desktop/createtable.sql)
+
+	1.6 Execute all commands in the "shoestore.sql" file:
 		\i <pathfile to shoestore.sql> 
-		(E.g. \i ‘C:Documents\\shoestore.sql’)
+		(E.g. \i C:/Users/admin/Desktop/shoestore.sql)
 
 	1.6 Connect to the database "shoestore" and see the database content
+
+--- METHOD 2: using restore database in PgAdmin4 ----
+=================================================
+0. Connect to the PgAdmin4
+1. Restore database
+	1.1 Create new user "admin_shoestore"
+	1.2 Create new database "shoestore"
+		Choose it's owner is "admin_shoestore"
+	1.3 Restore for database "shoestore"
+		Left click on "shoestore"
+		Choose "Restore"
+		Choose directory of file "backupdtb.backup"
+		Click "Restore"
+		Done!

@@ -2,16 +2,16 @@
 #include <stdlib.h> // Cho rand() và srand()
 #include <time.h>   // Cho time()
 #include <string.h> // Cần thiết cho hàm strcpy
-#define BIG_NUMBER 100000
-#define SMALL_NUMBER 10000
-#define PART_BIG_NUMBER 33333
+#define BIG_NUMBER 50000
+#define SMALL_NUMBER 8765
+#define PART_BIG_NUMBER 19999
 
 char customer_ids[1000][9];
 char product_ids[SMALL_NUMBER][9];
 char variant_ids[BIG_NUMBER][9];
 char order_ids[SMALL_NUMBER][9];
 char orderdetail_ids[BIG_NUMBER][9];
-char employee_ids[50][9];
+char employee_ids[20][9];
 
 // Ham tao so ngau nhien trong mot khoang
 int random_int(int min, int max)
@@ -516,8 +516,8 @@ const char *country_of_origin[200] = {
     "Trung Quốc", "Việt Nam", "Ý", "Ấn Độ", "Indonesia", "Brazil", "Thổ Nhĩ Kỳ", "Mexico", "Pakistan", "Bồ Đào Nha", "Tây Ban Nha", "Đức", "Hoa Kỳ", "Anh", "Pháp", "Nhật Bản", "Hàn Quốc", "Thái Lan", "Campuchia", "Myanmar", "Bangladesh", "Srilanka", "Ai Cập", "Ethiopia", "Nam Phi", "Kenya", "Maroc", "Tunisia", "Romania", "Ba Lan", "Slovakia", "Cộng hòa Séc", "Hungary", "Ukraine", "Nga", "Belarus", "Serbia", "Bosnia và Herzegovina", "Croatia", "Slovenia", "Albania", "Macedonia", "Bulgaria", "Hy Lạp", "Áo", "Bỉ", "Hà Lan", "Thụy Sĩ", "Thụy Điển", "Na Uy", "Phần Lan", "Đan Mạch", "Canada", "Argentina", "Colombia", "Peru", "Chile", "Ecuador", "Venezuela", "Uruguay", "Paraguay", "Bolivia", "Cuba", "Dominican Republic", "Haiti", "Guatemala", "Honduras", "El Salvador", "Nicaragua", "Costa Rica", "Panama", "Úc", "New Zealand", "Fiji", "Papua New Guinea", "Philippines", "Malaysia", "Singapore", "Đài Loan", "Hồng Kông", "Các Tiểu Vương quốc Ả Rập Thống nhất", "Ả Rập Xê Út", "Iran", "Israel", "Jordan", "Lebanon", "Syria", "Iraq", "Afghanistan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "Tajikistan", "Turkmenistan", "Azerbaijan", "Armenia", "Georgia", "Mongolia", "Nepal", "Bhutan", "Lào", "Brunei", "Đông Timor"};
 const char *color[200] = {
     "Black", "White", "Gray", "Brown", "Navy", "Red", "Blue", "Green", "Pink", "Yellow", "Orange", "Purple", "Beige", "Cream", "Khaki", "Olive", "Burgundy", "Maroon", "Teal", "Turquoise", "Aqua", "Coral", "Peach", "Mustard", "Lime", "Forest Green", "Royal Blue", "Sky Blue", "Lavender", "Fuchsia", "Magenta", "Gold", "Silver", "Bronze", "Rose Gold", "Metallic", "Iridescent", "Clear", "Transparent", "Multi-color", "Rainbow", "Printed", "Patterned", "Animal Print", "Floral", "Camo", "Neon", "Pastel", "Off-white", "Charcoal", "Taupe", "Espresso", "Cognac", "Stone", "Dusty Pink", "Mint Green", "Periwinkle", "Crimson", "Scarlet", "Cerulean", "Denim Blue", "Emerald", "Jade", "Ruby", "Sapphire", "Amethyst", "Topaz", "Copper", "Pewter", "Gunmetal", "Matte Black", "Glossy Black", "Patent Leather Black", "Distressed Brown", "Suede Brown", "Nubuck Black", "Canvas White", "Knit Gray", "Mesh Red", "Leather Blue", "Vegan Leather Green", "Synthetic Pink", "Rubber Yellow", "Velvet Purple", "Glitter Gold", "Sequin Silver", "Rhinestone Clear", "Embroidered Beige", "Reflective Gray", "Two-tone", "Three-tone", "Gradient", "Ombre", "Speckled", "Splatter", "Striped", "Plaid", "Houndstooth", "Geometric", "Abstract", "Ombré Blue", "Ombré Red", "Speckled White", "Splatter Black", "Striped Black and White", "Plaid Red and Black", "Houndstooth Gray", "Geometric Blue", "Abstract Multi", "Camo Green", "Leopard Print", "Zebra Print", "Snake Print", "Tiger Print", "Croc Print", "Paisley", "Polka Dot", "Checkered", "Gingham", "Floral Print"};
-const char *size[100] = {
-    "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "15", "35", "35.5", "36", "36.5", "37", "37.5", "38", "38.5", "39", "39.5", "40", "40.5", "41", "41.5", "42", "42.5", "43", "43.5", "44", "44.5", "45", "45.5", "46", "46.5", "47", "47.5", "48", "48.5", "49", "50", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "13", "22", "22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "28.5", "29", "29.5", "30", "1Y", "2Y", "3Y", "4Y", "5Y", "5C", "6C", "7C", "8C"};
+const char *size[52] = {
+    "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "14.5", "15", "35", "35.5", "36", "36.5", "37", "37.5", "38", "38.5", "39", "39.5", "40", "40.5", "41", "41.5", "42", "42.5", "43", "43.5", "44", "44.5", "45", "45.5", "46", "46.5", "47", "47.5", "48"};
 const char *brand_description[20] = {
     "A global leader in athletic footwear, blending innovative technology with iconic designs for peak performance and style.", "Driven by a passion for sport, Adidas creates cutting-edge shoes that combine athletic prowess with trendsetting fashion.", "Known for its bold designs and athletic heritage, Puma offers stylish and performance-driven footwear for athletes and fashion enthusiasts alike.", "Focusing on comfort and quality craftsmanship, New Balance delivers reliable athletic and lifestyle shoes with a timeless appeal.", "An enduring classic, Converse provides versatile, iconic canvas sneakers that embody casual cool and individual expression.", "The authentic original for skate culture, Vans offers durable, stylish shoes with signature waffle outsoles, perfect for active lifestyles.", "Recognized for their rebellious spirit and unmistakable durability, Dr. Martens boots offer comfort, iconic style, and a rugged edge.", "Crafted for outdoor adventures and urban exploration, Timberland footwear combines rugged durability with timeless utility and style.", "Famous for luxurious comfort, Ugg boots and slippers provide unparalleled warmth and coziness, becoming a staple for relaxed style.", "Offering innovative comfort technologies, Skechers provides a wide range of stylish and comfortable shoes for every activity and age.", "Revolutionizing running with maximum cushioning, Hoka shoes deliver exceptional comfort and support for long distances and varied terrains.", "Synonymous with ergonomic comfort, Birkenstock sandals and clogs offer anatomically shaped footbeds for natural support and well-being.", "A symbol of Italian luxury, Gucci footwear showcases exquisite craftsmanship, bold designs, and iconic motifs for the discerning fashionista.", "Instantly recognizable by their signature red soles, Christian Louboutin heels epitomize high-fashion glamour, allure, and daring design.", "Pioneering sustainable footwear, Allbirds creates comfortable and minimalist shoes from natural, eco-friendly materials like wool and tree fiber."};
 const char *product_name[200] = {
@@ -1028,16 +1028,30 @@ int main()
     }
 
     // insert bảng product
-    fprintf(filePointer, "INSERT INTO product(product_id, category_id, brand_id, product_name, purchase_price, selling_price, material, product_description) VALUES\n");
+    fprintf(filePointer, "INSERT INTO product(product_id, brand_id, product_name, purchase_price, selling_price, material, product_description) VALUES\n");
     for (int i = 0; i < SMALL_NUMBER; i++)
     {
         gen_product_id(i);
         double selling_price = random_double(10, 5000);
-        double purchase_price = random_double(10, selling_price);
+        double purchase_price = random_double(selling_price * 0.5, selling_price * 0.95);
         if (i != SMALL_NUMBER - 1)
-            fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s'),\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
+            fprintf(filePointer, "('%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s'),\n", product_ids[i], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
         else
-            fprintf(filePointer, "('%s', '%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s');\n\n", product_ids[i], categories[random_int(0, 49)][0], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
+            fprintf(filePointer, "('%s', '%s', '%s', '%.2lf', '%.2lf', '%s', '%s');\n\n", product_ids[i], brands[random_int(0, 199)][0], product_name[random_int(0, 99)], purchase_price, selling_price, material[random_int(0, 99)], description_product[random_int(0, 99)]);
+    }
+
+    //insert bảng product_category
+    fprintf(filePointer, "INSERT INTO product_category(product_id, category_id) VALUES\n");
+    for(int i = 0; i < SMALL_NUMBER; i++)
+    {
+        if(i != SMALL_NUMBER - 1){
+            fprintf(filePointer, "('%s', '%s'),\n", product_ids[i], categories[random_int(0, 5)][0]);
+            fprintf(filePointer, "('%s', '%s'),\n", product_ids[i], categories[random_int(6, 49)][0]);
+        }
+        else{
+            fprintf(filePointer, "('%s', '%s'),\n", product_ids[i], categories[random_int(0, 5)][0]);
+            fprintf(filePointer, "('%s', '%s');\n", product_ids[i], categories[random_int(6, 49)][0]);
+        }
     }
 
     // insert bảng variant
@@ -1046,17 +1060,17 @@ int main()
     {
         gen_variant_id(i);
         if (i != BIG_NUMBER - 1)
-            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0, 99)], size[random_int(0, 50)], random_int(0, 10000));
+            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d'),\n", variant_ids[i], product_ids[random_int(0, SMALL_NUMBER - 1)], color[random_int(0, 99)], size[random_int(0, 51)], random_int(0, 10000));
         else
-            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d');\n\n", variant_ids[i], product_ids[random_int(0, 999)], color[random_int(0, 99)], size[random_int(0, 50)], random_int(0, 10000));
+            fprintf(filePointer, "('%s','%s', '%s', '%s', '%d');\n\n", variant_ids[i], product_ids[random_int(0, SMALL_NUMBER - 1)], color[random_int(0, 99)], size[random_int(0, 51)], random_int(0, 10000));
     }
     
     // Insert bảng employee
     fprintf(filePointer, "INSERT INTO employee(employee_id, first_name, last_name, dob, phone_number, email, username, password) VALUES\n");
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 20; i++)
     {
         gen_employee_id(i);
-        if (i != 49)
+        if (i != 19)
             fprintf(filePointer, "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n",
                     employee_ids[i],
                     first_name[random_int(0, 199)],
@@ -1079,68 +1093,57 @@ int main()
     }
 
     // Insert bảng order
-    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, total_amount, total_discount, final_amount, order_date, status, payment_method, note) VALUES\n");
+    fprintf(filePointer, "INSERT INTO \"order\"(order_id, customer_id, order_date, status, last_updated_by_employee_id, payment_method, note) VALUES\n");
     for (int i = 0; i < SMALL_NUMBER; i++)
     {
         gen_order_id(i);
-        double total_amount = random_double(100, 10000);
-        double total_discount = random_double(0, total_amount * 0.3);
-        double final_amount = total_amount - total_discount;
 
         if (i != SMALL_NUMBER - 1)
-            fprintf(filePointer, "('%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d'),\n",
+            fprintf(filePointer, "('%s', '%s', '202%d-%02d-%02d', '%s', '%s', '%s', 'Order #%d'),\n",
                     order_ids[i],
                     customer_ids[random_int(0, 999)],
-                    total_amount,
-                    total_discount,
-                    final_amount,
+                    random_int(0,6),
                     random_int(1, 12),
                     random_int(1, 28),
                     order_status[random_int(0, 4)],
+                    employee_ids[random_int(0,19)],
                     payment_methods[random_int(0, 4)],
                     i + 1);
         else
-            fprintf(filePointer, "('%s', '%s', '%.2f', '%.2f', '%.2f', '2023-%02d-%02d', '%s', '%s', 'Order #%d');\n\n",
+            fprintf(filePointer, "('%s', '%s', '202%d-%02d-%02d', '%s', '%s', '%s', 'Order #%d');\n\n",
                     order_ids[i],
                     customer_ids[random_int(0, 999)],
-                    total_amount,
-                    total_discount,
-                    final_amount,
+                    random_int(0,6),
                     random_int(1, 12),
                     random_int(1, 28),
                     order_status[random_int(0, 4)],
+                    employee_ids[random_int(0,19)],
                     payment_methods[random_int(0, 4)],
                     i + 1);
     }
 
     // Insert bảng orderdetail
-    fprintf(filePointer, "INSERT INTO orderdetail(orderdetail_id, order_id, variant_id, order_quantity, unit_price, discount, sub_total) VALUES\n");
+    fprintf(filePointer, "INSERT INTO orderdetail(orderdetail_id, order_id, variant_id, order_quantity, discount) VALUES\n");
     for (int i = 0; i < BIG_NUMBER; i++)
     {
         gen_orderdetail_id(i);
         int order_quantity = random_int(1, 5);
-        double unit_price = random_double(50, 500);
-        double discount = random_double(0, unit_price * 0.2);
-        double sub_total = order_quantity * (unit_price - discount);
+        int discount = random_int(0, 30);
 
         if (i != BIG_NUMBER - 1)
-            fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f'),\n",
+            fprintf(filePointer, "('%s', '%s', '%s', '%d', '%d'),\n",
                     orderdetail_ids[i],
                     order_ids[random_int(0, SMALL_NUMBER - 1)],
                     variant_ids[random_int(0, BIG_NUMBER - 1)],
                     order_quantity,
-                    unit_price,
-                    discount,
-                    sub_total);
+                    discount);
         else
-            fprintf(filePointer, "('%s', '%s', '%s', '%d', '%.2f', '%.2f', '%.2f');\n\n",
+            fprintf(filePointer, "('%s', '%s', '%s', '%d', '%d');\n\n",
                     orderdetail_ids[i],
                     order_ids[random_int(0, SMALL_NUMBER - 1)],
                     variant_ids[random_int(0, BIG_NUMBER - 1)],
                     order_quantity,
-                    unit_price,
-                    discount,
-                    sub_total);
+                    discount);
     }
 
     // Insert bảng feedback
