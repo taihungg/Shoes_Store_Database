@@ -43,13 +43,23 @@ To import a database, the following methods can be used:
 --- METHOD 2: using restore database in PgAdmin4 ----
 =================================================
 0. Connect to the PgAdmin4
+
 1. Restore database
+
 	1.1 Create new user "admin_shoestore"
+
 	1.2 Create new database "shoestore"
+
 		Choose it's owner is "admin_shoestore"
+
 	1.3 Restore for database "shoestore"
+
 		Left click on "shoestore"
+
 		Choose "Restore"
+
 		Choose directory of file "backupdtb.backup"
+
 		Click "Restore"
+		
 		Done!
