@@ -73,7 +73,8 @@ CREATE TABLE "order" (
 	total_discount DECIMAL(10,2) DEFAULT 0.0,
 	final_amount DECIMAL(10,2) DEFAULT 0.0,
 	order_date DATE DEFAULT CURRENT_DATE,
-	status VARCHAR(20) CHECK (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
+	status VARCHAR(20) CHECK 
+        (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
 	last_updated_by_employee_id CHAR(8),
 	payment_method VARCHAR(20),
 	note TEXT,
@@ -105,7 +106,8 @@ CREATE TABLE status_history (
 	employee_id CHAR(8) NOT NULL,
 	order_id CHAR(8) NOT NULL,
 	date_changed DATE NOT NULL DEFAULT CURRENT_DATE,
-	status VARCHAR(20) CHECK (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
+	status VARCHAR(20) CHECK 
+        (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
 	CONSTRAINT pk_status_history PRIMARY KEY (employee_id, order_id, date_changed),
 	CONSTRAINT fk_employee_id FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
 	CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES "order"(order_id)
@@ -123,7 +125,7 @@ BEGIN
     WHERE v.variant_id = NEW.variant_id;
 
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'Product variant with ID % not found. Cannot determine selling price.', NEW.variant_id;
+        RAISE EXCEPTION 'Product variant with ID % not found.', NEW.variant_id;
     END IF;
 
     NEW.unit_price = v_selling_price;
