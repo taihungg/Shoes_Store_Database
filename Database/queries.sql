@@ -329,9 +329,105 @@ ORDER BY ts.max_sales;
 
 
 --Nguyễn Trung Kiên
--- 1. Liệt kê 10 sản phẩm có giá bán cao nhất (product_id, product_name, selling_price)
+-- 1. Lấy danh sách tất cả khách hàng (customer_id, họ tên, thành phố, số điện thoại)
+SELECT customer_id, first_name || ' ' || last_name AS full_name, city, phone_number
+FROM customer
+LIMIT 10;
+
+-- 2. Liệt kê 10 sản phẩm có giá bán cao nhất (product_id, product_name, selling_price)
 SELECT product_id, product_name, selling_price
 FROM product
 ORDER BY selling_price DESC
 LIMIT 10;
 
+-- 3. Tìm các khách hàng đã từng mua hàng ở Hà Nội
+SELECT DISTINCT c.customer_id, c.first_name, c.last_name
+FROM customer c
+JOIN "order" o ON c.customer_id = o.customer_id
+WHERE c.city = 'Hà Nội';
+
+-- 4. Liệt kê các sản phẩm chưa từng được bán (không xuất hiện trong orderdetail)
+SELECT p.product_id, p.product_name
+FROM product p
+LEFT JOIN variant v ON p.product_id = v.product_id
+LEFT JOIN orderdetail od ON v.variant_id = od.variant_id
+WHERE od.orderdetail_id IS NULL
+LIMIT 10;
+
+-- 5. Tìm khách hàng đã mua ít nhất một sản phẩm ở mọi danh mục (category)
+SELECT c.customer_id, c.first_name, c.last_name
+FROM customer c
+JOIN "order" o ON c.customer_id = o.customer_id
+JOIN orderdetail od ON o.order_id = od.order_id
+JOIN variant v ON od.variant_id = v.variant_id
+JOIN product_category pc ON v.product_id = pc.product_id
+GROUP BY c.customer_id, c.first_name, c.last_name
+HAVING COUNT(DISTINCT pc.category_id) = (SELECT COUNT(*) FROM category);
+
+-- 6. Liệt kê các khách hàng đã đặt từ 3 đơn hàng trở lên trong năm 2024
+SELECT c.customer_id, c.first_name, c.last_name, COUNT(o.order_id) AS total_orders
+FROM customer c
+JOIN "order" o ON c.customer_id = o.customer_id
+WHERE EXTRACT(YEAR FROM o.order_date) = 2024
+GROUP BY c.customer_id, c.first_name, c.last_name
+HAVING COUNT(o.order_id) >= 3
+ORDER BY total_orders DESC;
+
+-- 7. Tính tổng số lượng bán của từng sản phẩm, lấy top 5 sản phẩm bán chạy nhất
+WITH product_sales AS (
+  SELECT p.product_id, p.product_name, SUM(od.order_quantity) AS total_sold
+  FROM product p
+  JOIN variant v ON p.product_id = v.product_id
+  JOIN orderdetail od ON v.variant_id = od.variant_id
+  GROUP BY p.product_id, p.product_name
+)
+SELECT * FROM product_sales
+ORDER BY total_sold DESC
+LIMIT 5;
+
+-- 8. WITH: Tính tổng doanh thu từng tháng trong năm 2024
+WITH monthly_revenue AS (
+  SELECT EXTRACT(MONTH FROM order_date) AS month, SUM(final_amount) AS revenue
+  FROM "order"
+  WHERE EXTRACT(YEAR FROM order_date) = 2024
+  GROUP BY month
+)
+SELECT * FROM monthly_revenue
+ORDER BY month;
+
+-- 9. FUNCTION: Trả về tổng số đơn hàng của một khách hàng theo customer_id
+CREATE OR REPLACE FUNCTION total_orders_by_customer(cid CHAR(8))
+RETURNS INTEGER AS $$
+DECLARE
+  result INTEGER;
+BEGIN
+  SELECT COUNT(*) INTO result FROM "order" WHERE customer_id = cid;
+  RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Gọi thử:
+SELECT customer_id, first_name, last_name, total_orders_by_customer(customer_id) AS total_orders
+FROM customer
+WHERE customer_id = 'CUS00001';
+
+-- 10. FUNCTION: Trả về tổng doanh thu của một thương hiệu theo brand_id
+CREATE OR REPLACE FUNCTION brand_revenue(bid CHAR(4))
+RETURNS NUMERIC AS $$
+DECLARE
+  revenue NUMERIC;
+BEGIN
+  SELECT SUM(od.sub_total) INTO revenue
+  FROM orderdetail od
+  JOIN variant v ON od.variant_id = v.variant_id
+  JOIN product p ON v.product_id = p.product_id
+  WHERE p.brand_id = bid;
+  RETURN COALESCE(revenue, 0);
+END;
+$$ LANGUAGE plpgsql;
+
+-- Gọi thử:
+SELECT brand_id, brand_name, brand_revenue(brand_id) AS total_revenue
+FROM brand
+ORDER BY total_revenue DESC
+LIMIT 5;
