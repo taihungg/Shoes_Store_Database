@@ -427,3 +427,135 @@ SELECT brand_id, brand_name, brand_revenue(brand_id) AS total_revenue
 FROM brand
 ORDER BY total_revenue DESC
 LIMIT 5;
+
+
+--Trần Việt Gia Khánh
+-- Query 1: Liệt kê tất cả nhân viên và thông tin liên lạc của họ.
+SELECT
+    employee_id,
+    concat(first_name || ' ' || last_name) AS full_name,
+    phone_number,
+    email
+FROM employee;
+
+-- Query 22: Tìm các sản phẩm được làm từ một chất liệu cụ thể 
+SELECT
+    product_id,
+    product_name,
+    material,
+    selling_price
+FROM product
+WHERE material = 'Leather';
+
+-- Query 23: Liệt kê các đơn hàng đã được cập nhật bởi một nhân viên cụ thể.
+SELECT
+    o.order_id,
+    o.status,
+    o.final_amount,
+    concat(e.first_name || ' ' || e.last_name) AS employee_updated
+FROM "order" o
+JOIN employee e ON o.last_updated_by_employee_id = e.employee_id
+WHERE e.employee_id = 'EMP00001'; 
+
+
+-- Query 24: Tính tổng giá trị tồn kho (dựa trên giá nhập) cho mỗi thương hiệu.
+SELECT
+    b.brand_name,
+    SUM(v.stock_quantity * p.purchase_price) AS total_inventory_value
+FROM variant v
+JOIN product p ON v.product_id = p.product_id
+JOIN brand b ON p.brand_id = b.brand_id
+GROUP BY b.brand_name
+ORDER BY total_inventory_value DESC;
+
+
+-- Query 25: Tìm những khách hàng đã mua hàng nhưng chưa bao giờ để lại đánh giá (feedback).
+SELECT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    c.email
+FROM customer c
+WHERE c.customer_id NOT IN (
+    SELECT DISTINCT o.customer_id
+    FROM "order" o
+    JOIN orderdetail od ON o.order_id = od.order_id
+    JOIN feedback f ON od.orderdetail_id = f.orderdetail_id
+);
+
+
+-- Query 26: Hiển thị lịch sử thay đổi trạng thái chi tiết của một đơn hàng.
+SELECT
+    sh.order_id,
+    sh.date_changed,
+    sh.status
+FROM status_history sh
+JOIN employee e ON sh.employee_id = e.employee_id
+WHERE sh.order_id = 'ORD00002' -- Thay 'ORD00002' bằng ID đơn hàng cần xem
+ORDER BY sh.date_changed ASC;
+
+-- Query 27: Tính toán thời gian giao hàng trung bình (từ lúc đặt hàng đến lúc giao thành công).
+WITH OrderCompletionTime AS (
+    SELECT
+        o.order_id,
+        o.order_date,
+        sh.date_changed AS delivery_date
+    FROM "order" o
+    JOIN status_history sh ON o.order_id = sh.order_id
+    WHERE o.status = 'DELIVERED' AND sh.status = 'DELIVERED'
+)
+SELECT
+    AVG(delivery_date - order_date) AS average_delivery_days
+FROM OrderCompletionTime;
+
+
+-- Query 28: Liệt kê 5 cặp sản phẩm thường được mua cùng nhau nhất.
+SELECT
+    p1.product_name AS product_1,
+    p2.product_name AS product_2,
+    COUNT(*) AS times_bought_together
+FROM orderdetail od1
+JOIN orderdetail od2 ON od1.order_id = od2.order_id AND od1.variant_id < od2.variant_id
+JOIN variant v1 ON od1.variant_id = v1.variant_id
+JOIN product p1 ON v1.product_id = p1.product_id
+JOIN variant v2 ON od2.variant_id = v2.variant_id
+JOIN product p2 ON v2.product_id = p2.product_id
+GROUP BY p1.product_name, p2.product_name
+ORDER BY times_bought_together DESC
+LIMIT 5;
+
+
+-- Query 29: Xếp hạng khách hàng trong mỗi thành phố dựa trên tổng chi tiêu.
+WITH CustomerSpendingByCity AS (
+    SELECT
+        c.city,
+        concat(c.first_name || ' ' || c.last_name) AS customer_name,
+        SUM(o.final_amount) AS total_spent,
+        RANK() OVER(PARTITION BY c.city ORDER BY SUM(o.final_amount) DESC) as spending_rank
+    FROM customer c
+    JOIN "order" o ON c.customer_id = o.customer_id
+    GROUP BY c.city, customer_name
+)
+SELECT
+    city,
+    customer_name,
+    total_spent,
+    spending_rank
+FROM CustomerSpendingByCity
+WHERE spending_rank <= 3
+ORDER BY city, spending_rank;
+
+
+-- Query 30: Tìm ngày có doanh thu cao nhất trong lịch sử.
+WITH DailyRevenue AS (
+    SELECT
+        order_date,
+        SUM(final_amount) as daily_total
+    FROM "order"
+    GROUP BY order_date
+)
+SELECT
+    order_date,
+    daily_total
+FROM DailyRevenue
+WHERE daily_total = (SELECT MAX(daily_total) FROM DailyRevenue);
