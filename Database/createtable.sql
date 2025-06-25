@@ -219,3 +219,91 @@ CREATE TRIGGER trg_log_order_status_change
 AFTER UPDATE ON "order"
 FOR EACH ROW
 EXECUTE FUNCTION log_order_status_change();
+CREATE OR REPLACE FUNCTION update_stock_quantity_function()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_stock_quantity INT;
+    v_quantity_change INT;
+BEGIN
+    SELECT stock_quantity INTO v_stock_quantity
+    FROM variant
+    WHERE variant_id = COALESCE(NEW.variant_id, OLD.variant_id);
+
+    IF TG_OP = 'INSERT' THEN
+        IF v_stock_quantity < NEW.order_quantity THEN
+            RAISE EXCEPTION 'Không đủ số lượng tồn kho cho sản phẩm có variant_id %. Chỉ còn % sản phẩm.', NEW.variant_id, v_stock_quantity;
+        END IF;
+        UPDATE variant
+        SET stock_quantity = stock_quantity - NEW.order_quantity
+        WHERE variant_id = NEW.variant_id;
+
+    ELSIF TG_OP = 'DELETE' THEN
+        UPDATE variant
+        SET stock_quantity = stock_quantity + OLD.order_quantity
+        WHERE variant_id = OLD.variant_id;
+
+    ELSIF TG_OP = 'UPDATE' THEN
+        v_quantity_change = NEW.order_quantity - OLD.order_quantity;
+
+        -- Kiểm tra nếu số lượng tồn kho không đủ cho sự thay đổi
+        IF v_stock_quantity < v_quantity_change THEN
+             RAISE EXCEPTION 'Không đủ số lượng tồn kho để tăng số lượng cho sản phẩm có variant_id %. Chỉ còn % sản phẩm.', NEW.variant_id, v_stock_quantity;
+        END IF;
+        UPDATE variant
+        SET stock_quantity = stock_quantity - v_quantity_change
+        WHERE variant_id = NEW.variant_id;
+    END IF;
+    IF TG_OP = 'DELETE' THEN
+        RETURN OLD;
+    ELSE
+        RETURN NEW;
+    END IF;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_before_orderdetail_change_update_stock
+BEFORE INSERT OR UPDATE OR DELETE ON orderdetail
+FOR EACH ROW
+EXECUTE FUNCTION update_stock_quantity_function();
+
+CREATE OR REPLACE FUNCTION update_product_average_rating_function()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_product_id CHAR(8);
+    v_avg_rating NUMERIC(2,1);
+BEGIN
+    SELECT v.product_id INTO v_product_id
+    FROM orderdetail od
+    JOIN variant v ON od.variant_id = v.variant_id
+    WHERE od.orderdetail_id = COALESCE(NEW.orderdetail_id, OLD.orderdetail_id);
+
+    SELECT AVG(fb.rating) INTO v_avg_rating
+    FROM feedback fb
+    JOIN orderdetail od ON fb.orderdetail_id = od.orderdetail_id
+    JOIN variant v ON od.variant_id = v.variant_id
+    WHERE v.product_id = v_product_id;
+
+    UPDATE product
+    SET average_rating = v_avg_rating
+    WHERE product_id = v_product_id;
+    IF TG_OP = 'DELETE' THEN
+        RETURN OLD;
+    ELSE
+        RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_after_feedback_change
+AFTER INSERT OR UPDATE OR DELETE ON feedback
+FOR EACH ROW
+EXECUTE FUNCTION update_product_average_rating_function();
+
+CREATE INDEX idx_product_brand_id ON product(brand_id);
+CREATE INDEX idx_order_customer_id ON "order"(customer_id);
+CREATE UNIQUE INDEX idx_customer_email_unique ON customer(email);
+CREATE INDEX idx_orderdetail_order_variant ON orderdetail(order_id, variant_id);
+CREATE INDEX idx_variant_product_id ON variant(product_id);
+CREATE INDEX idx_status_history_order_id ON status_history(order_id);
+CREATE UNIQUE INDEX idx_employee_email_unique ON employee(email);
