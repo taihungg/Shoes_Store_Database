@@ -324,3 +324,12 @@ FROM top_sales ts
 JOIN category c
 USING (category_id)
 ORDER BY ts.max_sales;
+
+
+--Nguyễn Trung Kiên
+-- 1. Liệt kê 10 sản phẩm có giá bán cao nhất (product_id, product_name, selling_price)
+SELECT product_id, product_name, selling_price
+FROM product
+ORDER BY selling_price DESC
+LIMIT 10;
+

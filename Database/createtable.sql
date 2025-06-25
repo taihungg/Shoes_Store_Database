@@ -217,3 +217,35 @@ CREATE TRIGGER trg_log_order_status_change
 AFTER UPDATE ON "order"
 FOR EACH ROW
 EXECUTE FUNCTION log_order_status_change();
+
+CREATE OR REPLACE FUNCTION update_variant_stock_on_order()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE variant
+    SET stock_quantity = stock_quantity - NEW.order_quantity
+    WHERE variant_id = NEW.variant_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_variant_stock_on_order
+AFTER INSERT ON orderdetail
+FOR EACH ROW
+EXECUTE FUNCTION update_variant_stock_on_order();
+
+CREATE OR REPLACE FUNCTION restore_variant_stock_on_orderdetail_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE variant
+    SET stock_quantity = stock_quantity + OLD.order_quantity
+    WHERE variant_id = OLD.variant_id;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_restore_variant_stock_on_orderdetail_delete
+AFTER DELETE ON orderdetail
+FOR EACH ROW
+EXECUTE FUNCTION restore_variant_stock_on_orderdetail_delete();
