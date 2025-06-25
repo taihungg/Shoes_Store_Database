@@ -32,7 +32,7 @@ CREATE TABLE category (
 
 CREATE TABLE brand (
     brand_id CHAR(4) PRIMARY KEY,
-    brand_name CHAR(100) NOT NULL,
+    brand_name VARCHAR(100) NOT NULL,
     country_of_origin VARCHAR(40),
     brand_description TEXT
 );

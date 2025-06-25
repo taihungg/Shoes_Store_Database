@@ -184,3 +184,143 @@ JOIN variant v ON od.variant_id = v.variant_id
 JOIN product p ON v.product_id = p.product_id
 GROUP BY c.customer_id, c.first_name, c.last_name
 HAVING COUNT(DISTINCT p.category_id) = (SELECT COUNT(*) FROM category);
+
+
+
+
+
+
+--Tài Hưng
+--1. Tính tổng final_amount cho mỗi payment_method trong bảng order. Hiển thị payment_method và tổng doanh thu, sắp xếp giảm dần theo tổng doanh thu.
+SELECT payment_method, SUM(final_amount) total_amount_by_payment_method
+FROM "order"
+GROUP BY payment_method
+ORDER BY total_amount_by_payment_method DESC;
+
+--2. Xác định product_name và brand_name của sản phẩm đã được bán với số lượng tổng cộng cao nhất trên tất cả các đơn hàng.
+WITH total_quantity_by_product AS (
+    SELECT p.product_id, SUM(od.order_quantity) total_quantity_sold
+    FROM orderdetail od
+    JOIN variant v
+    USING (variant_id)
+    JOIN product p
+    USING (product_id)
+    GROUP BY p.product_id
+)
+SELECT p.product_id, p.product_name, b.brand_name, ts.total_quantity_sold
+FROM product p
+JOIN total_quantity_by_product ts
+USING (product_id)
+JOIN brand b
+USING (brand_id)
+WHERE ts.total_quantity_sold = (
+    SELECT MAX(total_quantity_sold)
+    FROM total_quantity_by_product
+)
+ORDER BY p.product_id ASC;
+
+--3. Tìm product_id, product_name, purchase_price, selling_price, và tính phần trăm lợi nhuận ((selling_price - purchase_price) / purchase_price * 100) cho mỗi sản phẩm. Sắp xếp kết quả theo phần trăm lợi nhuận giảm dần.
+SELECT product_id, product_name, purchase_price, selling_price, ROUND(((selling_price - purchase_price) / purchase_price * 100), 2) profit_margin
+FROM product
+ORDER BY profit_margin DESC
+LIMIT 10;
+
+--4. Tìm customer_id, first_name, last_name và tổng số tiền đã chi tiêu (final_amount) của khách hàng đã chi tiêu nhiều tiền nhất trên tất cả các đơn hàng của họ.
+WITH customer_spent AS(
+    SELECT c.customer_id, CONCAT(c.first_name, ' ', c.last_name) customer_name, SUM(o.final_amount) total_spent
+    FROM customer c
+    JOIN "order" o
+    USING (customer_id)
+    GROUP BY customer_id
+)
+SELECT customer_id, customer_name, total_spent
+FROM customer_spent
+WHERE total_spent = (
+    SELECT MAX(total_spent)
+    FROM customer_spent
+);
+
+--5. Liệt kê product_name và số lượng variant mà mỗi sản phẩm có. Sắp xếp kết quả giảm dần theo số lượng biến thể.
+SELECT product_id, product_name, COUNT(variant_id) number_of_variants
+FROM product 
+JOIN variant
+USING (product_id)
+GROUP BY product_id
+ORDER BY number_of_variants DESC
+LIMIT 10;
+
+--6. Cho product_id là 'PD000001', liệt kê tất cả các category_name mà sản phẩm này thuộc về.
+CREATE OR REPLACE FUNCTION find_product_category(input_product_id CHAR(8))
+RETURNS TABLE (category_name VARCHAR(30))
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT c.category_name 
+    FROM product_category pc
+    JOIN category c
+    USING(category_id)
+    JOIN product p
+    USING (product_id)
+    WHERE p.product_id = input_product_id;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT find_product_category('PD000001');
+
+--7. Liệt kê variant_id và stock_quantity của các biến thể chưa từng xuất hiện trong bất kỳ orderdetail nào.
+SELECT v.variant_id, v.stock_quantity
+FROM variant v
+LEFT JOIN orderdetail od
+USING(variant_id)
+WHERE orderdetail_id is NULL
+ORDER BY stock_quantity DESC
+LIMIT 10;
+
+--8. Đối với mỗi product_name, tính tổng stock_quantity của tất cả các biến thể (variant) liên quan đến sản phẩm đó. Hiển thị product_name và tổng số lượng tồn kho.
+SELECT p.product_id, SUM(v.stock_quantity) total_stock_quantity
+FROM product p 
+JOIN variant v
+USING (product_id)
+GROUP BY product_id
+ORDER BY total_stock_quantity ASC
+LIMIT 10;
+
+--9. Tìm order_id, order_date, và status của các đơn hàng có ít nhất một variant trong orderdetail mà stock_quantity của biến thể đó bằng 0. (Giả định stock_quantity ở đây là trạng thái hiện tại, không phải tại thời điểm đặt hàng).
+WITH order_has_soldout_variant AS (
+    SELECT o.order_id, v.variant_id
+    FROM "order" o
+    JOIN orderdetail od
+    USING (order_id)
+    JOIN variant v
+    USING (variant_id)
+    WHERE v.stock_quantity = 0
+)
+SELECT o.order_id, o.order_date, o.status, COUNT(ov.variant_id) number_of_soldout_variant
+FROM "order" o
+JOIN order_has_soldout_variant ov
+USING(order_id)
+GROUP BY o.order_id
+ORDER BY o.order_id;
+
+-- 10. Đối với mỗi category_name, tìm product_name của sản phẩm có tổng số lượng bán cao nhất (order_quantity trong orderdetail) trong danh mục đó. Nếu có nhiều sản phẩm cùng có số lượng bán cao nhất, liệt kê tất cả.
+WITH total_quantity_by_product AS (
+    SELECT p.product_id, p.product_name, SUM(od.order_quantity) total_quantity_sold, pc.category_id
+    FROM orderdetail od
+    JOIN variant v
+    USING (variant_id)
+    JOIN product p
+    USING (product_id)
+    JOIN product_category pc
+    USING (product_id)
+    GROUP BY p.product_id, pc.category_id
+), 
+top_sales AS (
+    SELECT category_id, MAX(total_quantity_sold) max_sales
+    FROM total_quantity_by_product
+    GROUP BY category_id
+)
+SELECT ts.category_id, c.category_name, ts.max_sales
+FROM top_sales ts
+JOIN category c
+USING (category_id)
+ORDER BY ts.max_sales;
