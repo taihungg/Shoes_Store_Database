@@ -191,13 +191,14 @@ HAVING COUNT(DISTINCT p.category_id) = (SELECT COUNT(*) FROM category);
 
 
 --Tài Hưng
---1. Tính tổng final_amount cho mỗi payment_method trong bảng order. Hiển thị payment_method và tổng doanh thu, sắp xếp giảm dần theo tổng doanh thu.
+--1. Tính tổng final_amount cho mỗi payment_method trong bảng order.
+--Hiển thị payment_method và tổng doanh thu, sắp xếp giảm dần theo tổng doanh thu.
 SELECT payment_method, SUM(final_amount) total_amount_by_payment_method
 FROM "order"
 GROUP BY payment_method
 ORDER BY total_amount_by_payment_method DESC;
 
---2. Xác định product_name và brand_name của sản phẩm đã được bán với số lượng tổng cộng cao nhất trên tất cả các đơn hàng.
+--2. Xác định sản phẩm đã được bán với số lượng tổng cộng cao nhất trên tất cả các đơn hàng.
 WITH total_quantity_by_product AS (
     SELECT p.product_id, SUM(od.order_quantity) total_quantity_sold
     FROM orderdetail od
@@ -219,13 +220,14 @@ WHERE ts.total_quantity_sold = (
 )
 ORDER BY p.product_id ASC;
 
---3. Tìm product_id, product_name, purchase_price, selling_price, và tính phần trăm lợi nhuận ((selling_price - purchase_price) / purchase_price * 100) cho mỗi sản phẩm. Sắp xếp kết quả theo phần trăm lợi nhuận giảm dần.
+--3. Tìm product_id, product_name, purchase_price, selling_price, và tính phần trăm lợi nhuận 
+--cho mỗi sản phẩm. Sắp xếp kết quả theo phần trăm lợi nhuận giảm dần.
 SELECT product_id, product_name, purchase_price, selling_price, ROUND(((selling_price - purchase_price) / purchase_price * 100), 2) profit_margin
 FROM product
 ORDER BY profit_margin DESC
 LIMIT 10;
 
---4. Tìm customer_id, first_name, last_name và tổng số tiền đã chi tiêu (final_amount) của khách hàng đã chi tiêu nhiều tiền nhất trên tất cả các đơn hàng của họ.
+--4. Tìm thông tin khách hàng và tổng số tiền đã chi tiêu (final_amount) của khách hàng đã chi tiêu nhiều tiền nhất trên tất cả các đơn hàng của họ.
 WITH customer_spent AS(
     SELECT c.customer_id, CONCAT(c.first_name, ' ', c.last_name) customer_name, SUM(o.final_amount) total_spent
     FROM customer c
@@ -276,7 +278,7 @@ WHERE orderdetail_id is NULL
 ORDER BY stock_quantity DESC
 LIMIT 10;
 
---8. Đối với mỗi product_name, tính tổng stock_quantity của tất cả các biến thể (variant) liên quan đến sản phẩm đó. Hiển thị product_name và tổng số lượng tồn kho.
+--8. Hiển thị thông tin sản phẩm và tổng số lượng tồn kho của sản phẩm.
 SELECT p.product_id, SUM(v.stock_quantity) total_stock_quantity
 FROM product p 
 JOIN variant v
@@ -285,7 +287,7 @@ GROUP BY product_id
 ORDER BY total_stock_quantity ASC
 LIMIT 10;
 
---9. Tìm order_id, order_date, và status của các đơn hàng có ít nhất một variant trong orderdetail mà stock_quantity của biến thể đó bằng 0. (Giả định stock_quantity ở đây là trạng thái hiện tại, không phải tại thời điểm đặt hàng).
+--9. Tìm order_id, order_date, và status của các đơn hàng có ít nhất một variant trong orderdetail mà stock_quantity của biến thể đó bằng 0.
 WITH order_has_soldout_variant AS (
     SELECT o.order_id, v.variant_id
     FROM "order" o
@@ -302,7 +304,7 @@ USING(order_id)
 GROUP BY o.order_id
 ORDER BY o.order_id;
 
--- 10. Đối với mỗi category_name, tìm product_name của sản phẩm có tổng số lượng bán cao nhất (order_quantity trong orderdetail) trong danh mục đó. Nếu có nhiều sản phẩm cùng có số lượng bán cao nhất, liệt kê tất cả.
+-- 10. Đối với mỗi category_name, tìm thông tin của sản phẩm có tổng số lượng bán cao nhất trong danh mục đó.
 WITH total_quantity_by_product AS (
     SELECT p.product_id, p.product_name, SUM(od.order_quantity) total_quantity_sold, pc.category_id
     FROM orderdetail od
