@@ -1,3 +1,5 @@
+SET client_encoding = 'UTF8'; --do data sample có nhiều dữ liệu dùng tiếng việt nên phải dùng UTF8
+
 --Tài Hưng
 --1. Tính tổng final_amount cho mỗi payment_method trong bảng order.
 --Hiển thị payment_method và tổng doanh thu, sắp xếp giảm dần theo tổng doanh thu.
