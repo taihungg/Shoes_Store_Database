@@ -52,7 +52,7 @@ CREATE TABLE product (
 CREATE TABLE variant (
 	variant_id CHAR(8) PRIMARY KEY,
 	product_id CHAR(8) NOT NULL,
-	color VARCHAR(20) NOT NULL,
+	color VARCHAR(50) NOT NULL,
 	size DECIMAL(3,1) NOT NULL,
 	stock_quantity INTEGER NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
 	CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES product(product_id)
@@ -66,8 +66,11 @@ CREATE TABLE product_category (
 	CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
 
+CREATE SEQUENCE order_id_seq START WITH 1;
+CREATE SEQUENCE orderdetail_id_seq START WITH 1;
+
 CREATE TABLE "order" (
-	order_id CHAR(8) PRIMARY KEY,
+	order_id CHAR(8) PRIMARY KEY DEFAULT 'OD' || LPAD(nextval('order_id_seq')::TEXT, 6, '0'),
 	customer_id CHAR(8),
 	total_amount DECIMAL(10,2) DEFAULT 0.0,
 	total_discount DECIMAL(10,2) DEFAULT 0.0,
@@ -76,14 +79,14 @@ CREATE TABLE "order" (
 	status VARCHAR(20) CHECK 
         (status IN ('PENDING', 'PACKAGING', 'ON DELIVERY', 'DELIVERED', 'CANCELLED')) DEFAULT 'PENDING',
 	last_updated_by_employee_id CHAR(8),
-	payment_method VARCHAR(20),
+	payment_method VARCHAR(20) CHECK (payment_method IN ('CASH', 'CREDIT CARD', 'VISA CARD', 'E-WALLET', 'BANK TRANSFER')),
 	note TEXT,
 	CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
 	CONSTRAINT fk_employee_id FOREIGN KEY (last_updated_by_employee_id) REFERENCES employee(employee_id)
 );
 
 CREATE TABLE orderdetail (
-	orderdetail_id CHAR(8) PRIMARY KEY,
+	orderdetail_id CHAR(8) PRIMARY KEY DEFAULT 'DT' || LPAD(nextval('orderdetail_id_seq')::TEXT, 6, '0'),
 	order_id CHAR(8) NOT NULL,
 	variant_id CHAR(8) NOT NULL,
 	order_quantity INTEGER NOT NULL,

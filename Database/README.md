@@ -30,11 +30,9 @@ To import a database, the following methods can be used:
 
 		\c shoestore admin_shoestore 
 
-	1.5 Execute all commands in the "createtable.sql", "index.sql", "trigger.sql" file:
-		\i <pathfile to createtable.sql> 
-		\i <pathfile to index.sql> 
-		\i <pathfile to trigger.sql> 
-		(E.g. \i C:/Users/admin/Desktop/createtable.sql)
+	1.5 Execute all commands in the "shoestore.sql" file:
+		\i <pathfile to shoestore.sql> 
+		(E.g. \i C:/Users/admin/Desktop/shoestore.sql)
 
 	1.6 Connect to the database "shoestore" and see the database content
 
